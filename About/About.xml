@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>RimVore2 - Cross-Path Interactions</name>
+  <author>Esegn</author>
+  <url>https://gitlab.com/Nabber/rimvore-2</url>
+  <packageId>Esegn.RV2CPI</packageId>
+  <supportedVersions>
+    <li>1.4</li>
+    <li>1.5</li>
+  </supportedVersions>
+  <description>Some changes to RimVore2 mainly focused on interactions between vore paths.</description>
+  <modDependencies>
+    <li>
+      <packageId>Nabber.RimVore2</packageId>
+      <displayName>RimVore-2</displayName>
+      <downloadUrl>https://gitlab.com/Nabber/rimvore-2.git</downloadUrl>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>Nabber.RimVore2</li>
+  </loadAfter>
+</ModMetaData>
