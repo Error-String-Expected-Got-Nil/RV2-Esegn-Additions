@@ -9,7 +9,7 @@ namespace RV2_Esegn_CPI.Utilities
         public static bool PathConflictsWithRecord(VoreTrackerRecord record, VorePathDef path)
         {
             // Probably unnecessary but can't hurt.
-            if (record.IsFinished) return false;
+            if (record.IsFinished || record.IsInterrupted) return false;
             
             // Endo vore never conflicts with itself.
             if (!record.VorePath.def.voreGoal.IsLethal && !path.voreGoal.IsLethal)
@@ -40,10 +40,19 @@ namespace RV2_Esegn_CPI.Utilities
             return false;
         }
         
-        public static bool PathConflictsWithAnyActiveVore(Pawn predator, VorePathDef path)
+        // outRecord is the record that conflicts, it's null if there isn't one
+        public static bool PathConflictsWithAnyActiveVore(Pawn predator, VorePathDef path, out VoreTrackerRecord 
+            outRecord)
         {
-            return Enumerable.Any(predator.PawnData().VoreTracker.VoreTrackerRecords, record => 
-                PathConflictsWithRecord(record, path));
+            foreach (var record in predator.PawnData().VoreTracker.VoreTrackerRecords)
+            {
+                if (!PathConflictsWithRecord(record, path)) continue;
+                outRecord = record;
+                return true;
+            }
+
+            outRecord = null;
+            return false;
         }
     }
 }

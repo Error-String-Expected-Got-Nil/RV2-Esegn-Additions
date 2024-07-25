@@ -7,12 +7,18 @@ namespace RV2_Esegn_CPI
     public class SettingsContainer_CPI : SettingsContainer
     {
         private BoolSmartSetting enableVorePathConflicts;
+        private BoolSmartSetting allowConflictingManualInteractions;
+        private BoolSmartSetting allowGoalSwitchersToProposeConflicting;
 
         public bool EnableVorePathConflicts => enableVorePathConflicts.value;
+        public bool AllowConflictingManualInteractions => allowConflictingManualInteractions.value;
+        public bool AllowGoalSwitchersToProposeConflicting => allowGoalSwitchersToProposeConflicting.value;
 
         public override void Reset()
         {
             enableVorePathConflicts = null;
+            allowConflictingManualInteractions = null;
+            allowGoalSwitchersToProposeConflicting = null;
             
             EnsureSmartSettingDefinition();
         }
@@ -20,10 +26,17 @@ namespace RV2_Esegn_CPI
         public override void EnsureSmartSettingDefinition()
         {
             if (enableVorePathConflicts == null || enableVorePathConflicts.IsInvalid())
-            {
                 enableVorePathConflicts = new BoolSmartSetting("RV2_CPI_Settings_EnableVorePathConflicts",
                     true, true, "RV2_CPI_Settings_EnableVorePathConflicts_Tip");
-            }
+            if (allowConflictingManualInteractions == null || allowConflictingManualInteractions.IsInvalid())
+                allowConflictingManualInteractions = new BoolSmartSetting(
+                    "RV2_CPI_Settings_AllowConflictingManualInteractions", false, false,
+                    "RV2_CPI_Settings_AllowConflictingManualInteractions_Tip");
+            if (allowGoalSwitchersToProposeConflicting == null || allowGoalSwitchersToProposeConflicting.IsInvalid())
+                allowGoalSwitchersToProposeConflicting = new BoolSmartSetting(
+                    "RV2_CPI_Settings_AllowGoalSwitchersToProposeConflicting", true, true,
+                    "RV2_CPI_Settings_AllowGoalSwitchersToProposeConflicting_Tip");
+
         }
         
         private bool heightStale = true;
@@ -38,6 +51,8 @@ namespace RV2_Esegn_CPI
                 Reset();
 
             enableVorePathConflicts.DoSetting(list);
+            allowConflictingManualInteractions.DoSetting(list);
+            allowGoalSwitchersToProposeConflicting.DoSetting(list);
 
             list.EndScrollView(ref height, ref heightStale);
         }
@@ -50,7 +65,11 @@ namespace RV2_Esegn_CPI
             }
 
             Scribe_Deep.Look(ref enableVorePathConflicts, "EnableVorePathConflicts", new object[0]);
-
+            Scribe_Deep.Look(ref allowConflictingManualInteractions, "AllowConflictingManualInteractions",
+                new object[0]);
+            Scribe_Deep.Look(ref allowGoalSwitchersToProposeConflicting,
+                "AllowGoalSwitchersToProposeConflicting", new object[0]);
+            
             PostExposeData();
         }
     }
