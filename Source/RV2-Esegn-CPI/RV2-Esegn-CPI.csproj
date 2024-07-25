@@ -65,6 +65,9 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Patches\Patch_RV2Settings.cs" />
+        <Compile Include="Settings\SettingsContainer_CPI.cs" />
+        <Compile Include="Settings\SettingsTab_CPI.cs" />
         <Compile Include="Startup.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>

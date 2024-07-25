@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>  
+
+    <RV2_CPI_SettingsTab>Cross-Path Interactions</RV2_CPI_SettingsTab>
+
+    <RV2_CPI_Settings_EnableVorePathConflicts>Enable vore path conflicts</RV2_CPI_Settings_EnableVorePathConflicts>
+    <RV2_CPI_Settings_EnableVorePathConflicts_Tip>Prevents preds from engaging in two different vore paths that shouldn't work together. For example, they cannot endo-store one prey in their stomach and digest another at the same time. Forces a vore path switch to the first path if necessary to rectify a conflict.</RV2_CPI_Settings_EnableVorePathConflicts_Tip>
+
+</LanguageData>
