@@ -15,12 +15,14 @@ namespace RV2_Esegn_CPI
         {
             reason = null;
             if (!RV2_CPI_Settings.cpi.EnableVorePathConflicts) return;
-
-            VoreTrackerRecord outRecord;
-            if (ConflictingPathUtils.PathConflictsWithAnyActiveVore(predator, __instance, out outRecord))
+            
+            if (ConflictingPathUtils.PathConflictsWithAnyActiveVore(predator, __instance, out _))
             {
-                reason = "RV2_CPI_Text_PathInvalidConflicting".Translate();
+                if (!isForAuto && RV2_CPI_Settings.cpi.AllowConflictingManualInteractions) return;
+                if (predator.QuirkManager()?.HasSpecialFlag("EnableGoalSwitching") == true
+                    && RV2_CPI_Settings.cpi.AllowGoalSwitchersToProposeConflicting) return; 
                 
+                reason = "RV2_CPI_Text_PathInvalidConflicting".Translate();
                 __result = false;
             }
         }

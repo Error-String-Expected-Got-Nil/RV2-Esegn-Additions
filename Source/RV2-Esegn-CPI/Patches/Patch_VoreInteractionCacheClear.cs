@@ -13,7 +13,7 @@ namespace RV2_Esegn_CPI
     // This file has all of these patches.
     
     [HarmonyPatch(typeof(VoreTrackerRecord))]
-    public class Patch_VoreTrackerRecord
+    public class Patch_VoreTrackerRecordCacheClear
     {
         // On start and stage pass
         // Path jumps always happen during the stage pass function so they're covered here too 
@@ -27,7 +27,7 @@ namespace RV2_Esegn_CPI
     }
 
     [HarmonyPatch(typeof(VoreTracker))]
-    public class Patch_VoreTracker
+    public class Patch_VoreTrackerCacheClear
     {
         // On path end
         [HarmonyPatch(nameof(VoreTracker.UntrackVore))]

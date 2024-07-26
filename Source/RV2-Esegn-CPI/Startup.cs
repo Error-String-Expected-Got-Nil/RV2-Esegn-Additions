@@ -13,8 +13,6 @@ namespace RV2_Esegn_CPI
             Harmony.DEBUG = false;
             Harmony harmony = new Harmony("RV2_Esegn_CPI");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
-            
-            RV2Log.Message("TEST - Cross-path interactions loaded!");
         }
     }
 }
