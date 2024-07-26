@@ -5,6 +5,7 @@
         <OutputPath>..\..\$(Configuration)\Assemblies\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <Configurations>1.4;1.5</Configurations>
+        <RootNamespace>RV2-Esegn-CPI</RootNamespace>
     </PropertyGroup>
     
     <PropertyGroup Condition="'$(Configuration)' == '1.4'">

@@ -14,13 +14,13 @@ namespace RV2_Esegn_CPI
             bool ignoreDesignations, bool ignoreRules, VorePathDef __instance, ref bool __result)
         {
             reason = null;
-            if (!RV2_CPI_Settings.cpi.EnableVorePathConflicts) return;
+            if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
             
             if (ConflictingPathUtils.PathConflictsWithAnyActiveVore(predator, __instance, out _))
             {
-                if (!isForAuto && RV2_CPI_Settings.cpi.AllowConflictingManualInteractions) return;
+                if (!isForAuto && RV2_EsegnAdditions_Settings.eadd.AllowConflictingManualInteractions) return;
                 if (predator.QuirkManager()?.HasSpecialFlag("EnableGoalSwitching") == true
-                    && RV2_CPI_Settings.cpi.AllowGoalSwitchersToProposeConflicting) return; 
+                    && RV2_EsegnAdditions_Settings.eadd.AllowGoalSwitchersToProposeConflicting) return; 
                 
                 reason = "RV2_CPI_Text_PathInvalidConflicting".Translate();
                 __result = false;

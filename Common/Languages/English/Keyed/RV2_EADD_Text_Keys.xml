@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>  
+
+    <RV2_EADD_Text_PathInvalidConflicting>Path conflicts</RV2_EADD_Text_PathInvalidConflicting>
+
+    <RV2_EADD_Text_ConflictingPathResolutionSwitch_Key>Conflicting vore path switch</RV2_EADD_Text_ConflictingPathResolutionSwitch_Key>
+    <RV2_EADD_Text_ConflictingPathResolutionSwitch>{PREDATOR} has switched vore goal for {PREY} to {NEWGOAL} because {OLDGOAL} conflicted with another active path.</RV2_EADD_Text_ConflictingPathResolutionSwitch>
+
+</LanguageData>

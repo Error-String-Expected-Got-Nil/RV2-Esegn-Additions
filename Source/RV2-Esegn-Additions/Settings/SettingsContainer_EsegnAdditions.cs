@@ -4,7 +4,7 @@ using Verse;
 
 namespace RV2_Esegn_CPI
 {
-    public class SettingsContainer_CPI : SettingsContainer
+    public class SettingsContainer_EsegnAdditions : SettingsContainer
     {
         private BoolSmartSetting enableVorePathConflicts;
         private BoolSmartSetting allowConflictingManualInteractions;
@@ -26,16 +26,16 @@ namespace RV2_Esegn_CPI
         public override void EnsureSmartSettingDefinition()
         {
             if (enableVorePathConflicts == null || enableVorePathConflicts.IsInvalid())
-                enableVorePathConflicts = new BoolSmartSetting("RV2_CPI_Settings_EnableVorePathConflicts",
-                    true, true, "RV2_CPI_Settings_EnableVorePathConflicts_Tip");
+                enableVorePathConflicts = new BoolSmartSetting("RV2_EADD_Settings_EnableVorePathConflicts",
+                    true, true, "RV2_EADD_Settings_EnableVorePathConflicts_Tip");
             if (allowConflictingManualInteractions == null || allowConflictingManualInteractions.IsInvalid())
                 allowConflictingManualInteractions = new BoolSmartSetting(
-                    "RV2_CPI_Settings_AllowConflictingManualInteractions", false, false,
-                    "RV2_CPI_Settings_AllowConflictingManualInteractions_Tip");
+                    "RV2_EADD_Settings_AllowConflictingManualInteractions", false, false,
+                    "RV2_EADD_Settings_AllowConflictingManualInteractions_Tip");
             if (allowGoalSwitchersToProposeConflicting == null || allowGoalSwitchersToProposeConflicting.IsInvalid())
                 allowGoalSwitchersToProposeConflicting = new BoolSmartSetting(
-                    "RV2_CPI_Settings_AllowGoalSwitchersToProposeConflicting", true, true,
-                    "RV2_CPI_Settings_AllowGoalSwitchersToProposeConflicting_Tip");
+                    "RV2_EADD_Settings_AllowGoalSwitchersToProposeConflicting", true, true,
+                    "RV2_EADD_Settings_AllowGoalSwitchersToProposeConflicting_Tip");
 
         }
         

@@ -11,24 +11,24 @@ namespace RV2_Esegn_CPI
         public RV2_CPI_Mod(ModContentPack content) : base(content)
         {
             mod = this;
-            GetSettings<RV2_CPI_Settings>();
+            GetSettings<RV2_EsegnAdditions_Settings>();
             WriteSettings();
         }
     }
 
-    public class RV2_CPI_Settings : ModSettings
+    public class RV2_EsegnAdditions_Settings : ModSettings
     {
-        public static SettingsContainer_CPI cpi;
+        public static SettingsContainer_EsegnAdditions eadd;
 
-        public RV2_CPI_Settings()
+        public RV2_EsegnAdditions_Settings()
         {
-            cpi = new SettingsContainer_CPI();
+            eadd = new SettingsContainer_EsegnAdditions();
         }
         
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Deep.Look(ref cpi, "RV2_CPI_SettingsContainer", new object[0]);
+            Scribe_Deep.Look(ref eadd, "RV2_EADD_SettingsContainer", new object[0]);
         }
     }
     
@@ -38,7 +38,7 @@ namespace RV2_Esegn_CPI
         [HarmonyPostfix]
         private static void AddCPISettings()
         {
-            RV2_CPI_Settings.cpi.DefsLoaded();
+            RV2_EsegnAdditions_Settings.eadd.DefsLoaded();
         }
     }
 
@@ -48,7 +48,7 @@ namespace RV2_Esegn_CPI
         [HarmonyPostfix]
         private static void AddCPISettings()
         {
-            RV2_CPI_Settings.cpi.Reset();
+            RV2_EsegnAdditions_Settings.eadd.Reset();
         }
     }
 
@@ -68,7 +68,7 @@ namespace RV2_Esegn_CPI
         [HarmonyPostfix]
         private static void AddCPISettings()
         {
-            Window_Settings.AddTab(new SettingsTab_CPI("RV2_CPI_SettingsTab".Translate(), 
+            Window_Settings.AddTab(new SettingsTab_EsegnAdditions("RV2_EADD_SettingsTab".Translate(), 
                 null, null));
         }
     }

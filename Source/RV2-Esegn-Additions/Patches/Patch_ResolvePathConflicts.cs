@@ -12,7 +12,7 @@ namespace RV2_Esegn_CPI
         [HarmonyPostfix]
         public static void Patch_Initialize(VoreTrackerRecord __instance)
         {
-            if (!RV2_CPI_Settings.cpi.EnableVorePathConflicts) return;
+            if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
             
             if (ConflictingPathUtils.PathConflictsWithAnyActiveVore(__instance.Predator, __instance.VorePath.def,
                     out _))
@@ -27,7 +27,7 @@ namespace RV2_Esegn_CPI
         [HarmonyPostfix]
         public static void Patch_MovePreyToNextStage(VoreTrackerRecord __instance)
         {
-            if (!RV2_CPI_Settings.cpi.EnableVorePathConflicts) return;
+            if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
             ConflictingPathUtils.CheckAndResolvePathConflicts(__instance);
         }
 
@@ -37,6 +37,7 @@ namespace RV2_Esegn_CPI
         [HarmonyPrefix]
         public static void Patch_JumpToOtherPath_Prefix()
         {
+            if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
             VoreJumpFlag = true;
         }
 
@@ -45,6 +46,7 @@ namespace RV2_Esegn_CPI
         [HarmonyPostfix]
         public static void Patch_JumpToOtherPath_Postfix()
         {
+            if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
             VoreJumpFlag = false;
         }
     }
@@ -60,6 +62,7 @@ namespace RV2_Esegn_CPI
         [HarmonyPostfix]
         public static void Patch_SplitOffNewVore(VoreTrackerRecord __result)
         {
+            if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
             if (Patch_VoreTrackerRecord.VoreJumpFlag)
             {
                 ConflictingPathUtils.CheckAndResolveOtherRecords(__result);

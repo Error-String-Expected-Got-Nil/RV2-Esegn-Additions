@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RV2-Esegn-CPI", "RV2-Esegn-CPI.csproj", "{62BDD074-A38E-4E4F-BD9F-AE4C10A33FF5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RV2-Esegn-Additions", "RV2-Esegn-Additions.csproj", "{62BDD074-A38E-4E4F-BD9F-AE4C10A33FF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
