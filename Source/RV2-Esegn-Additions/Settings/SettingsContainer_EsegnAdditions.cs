@@ -2,7 +2,7 @@
 using UnityEngine;
 using Verse;
 
-namespace RV2_Esegn_CPI
+namespace RV2_Esegn_Additions
 {
     public class SettingsContainer_EsegnAdditions : SettingsContainer
     {

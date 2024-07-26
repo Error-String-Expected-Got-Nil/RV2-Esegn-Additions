@@ -2,7 +2,7 @@
 using RimVore2;
 using UnityEngine;
 
-namespace RV2_Esegn_CPI
+namespace RV2_Esegn_Additions
 {
     public class SettingsTab_EsegnAdditions : SettingsTab
     {

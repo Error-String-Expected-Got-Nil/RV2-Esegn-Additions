@@ -2,7 +2,7 @@
 using HarmonyLib;
 using RimVore2;
 
-namespace RV2_Esegn_CPI
+namespace RV2_Esegn_Additions
 {
     [HarmonyPatch]
     public class Patch_JumpUtility

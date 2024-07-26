@@ -3,7 +3,7 @@ using HarmonyLib;
 using RimVore2;
 using Verse;
 
-namespace RV2_Esegn_CPI
+namespace RV2_Esegn_Additions
 {
     [StaticConstructorOnStartup]
     public static class Startup

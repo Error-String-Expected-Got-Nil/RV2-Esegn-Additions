@@ -1,8 +1,8 @@
 ﻿using HarmonyLib;
 using RimVore2;
-using RV2_Esegn_CPI.Utilities;
+using RV2_Esegn_Additions.Utilities;
 
-namespace RV2_Esegn_CPI
+namespace RV2_Esegn_Additions
 {
     [HarmonyPatch(typeof(VoreTrackerRecord))]
     public class Patch_VoreTrackerRecord

@@ -2,7 +2,7 @@
 using RimVore2;
 using Verse;
 
-namespace RV2_Esegn_CPI
+namespace RV2_Esegn_Additions
 {
     public class RV2_CPI_Mod : Mod
     {

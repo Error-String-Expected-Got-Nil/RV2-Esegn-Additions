@@ -4,7 +4,7 @@ using RimVore2;
 using RimWorld;
 using Verse;
 
-namespace RV2_Esegn_CPI.Utilities
+namespace RV2_Esegn_Additions.Utilities
 {
     public static class ConflictingPathUtils
     {
