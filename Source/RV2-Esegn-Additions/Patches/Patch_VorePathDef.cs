@@ -16,11 +16,34 @@ namespace RV2_Esegn_Additions
             reason = null;
             if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
             
-            if (ConflictingPathUtils.PathConflictsWithAnyActiveVore(predator, __instance, out _))
+            if (ConflictingPathUtils.PathConflictsWithAnyActiveVore(predator, __instance, out var conflictingRecord))
             {
+                if (!RV2_EsegnAdditions_Settings.eadd.PathConflictsIgnoreDesignations
+                    // If conflicts obey designations, prevent the path if it would cause a conflict that would resolve
+                    // in a way that disobeys designations...
+                    && (
+                        (conflictingRecord.VoreGoal.IsLethal
+                        && prey.PawnData()?.Designations?.TryGetValue(RV2DesignationDefOf.fatal)?.IsEnabled() == false)
+                        ||
+                        (!conflictingRecord.VoreGoal.IsLethal
+                        && prey.PawnData()?.Designations?.TryGetValue(RV2DesignationDefOf.endo)?.IsEnabled() == false)
+                        ) 
+                    // ...unless the predator is a goal-switcher, and the base mod setting that allows goal-switchers
+                    // to ignore designations is enabled.
+                    && !(
+                        predator.QuirkManager()?.HasSpecialFlag("EnableGoalSwitching") == true 
+                        && RV2Mod.Settings.features.IgnoreDesignationsGoalSwitching
+                        )
+                    )
+                {
+                    reason = "RV2_EADD_Text_PathInvalidConflictingDesignation".Translate();
+                    __result = false;
+                    return;
+                }
+                
                 if (!isForAuto && RV2_EsegnAdditions_Settings.eadd.AllowConflictingManualInteractions) return;
                 if (predator.QuirkManager()?.HasSpecialFlag("EnableGoalSwitching") == true
-                    && RV2_EsegnAdditions_Settings.eadd.AllowGoalSwitchersToProposeConflicting) return; 
+                    && RV2_EsegnAdditions_Settings.eadd.AllowGoalSwitchersToProposeConflicting) return;
                 
                 reason = "RV2_EADD_Text_PathInvalidConflicting".Translate();
                 __result = false;

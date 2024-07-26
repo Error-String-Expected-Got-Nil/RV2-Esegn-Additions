@@ -3,11 +3,24 @@
 
     <RV2_EADD_SettingsTab>Esegn's Stuff</RV2_EADD_SettingsTab>
 
+    <RV2_EADD_Settings_VorePathConflictsHeader>Vore Path Conflicts</RV2_EADD_Settings_VorePathConflictsHeader>
+
     <RV2_EADD_Settings_EnableVorePathConflicts>Enable vore path conflicts</RV2_EADD_Settings_EnableVorePathConflicts>
     <RV2_EADD_Settings_EnableVorePathConflicts_Tip>Prevents preds from engaging in two different vore paths that shouldn't work together. For example, they cannot endo-store one prey in their stomach and digest another at the same time. Forces a vore path switch to the first path if necessary to resolve a conflict.</RV2_EADD_Settings_EnableVorePathConflicts_Tip>
     <RV2_EADD_Settings_AllowConflictingManualInteractions>Allow conflicting manual interactions</RV2_EADD_Settings_AllowConflictingManualInteractions>
     <RV2_EADD_Settings_AllowConflictingManualInteractions_Tip>Manual vore interactions (i.e. initiated manually with right click) can be made despite path conflicts. This doesn't prevent the conflict, so the path will still switch when it gets a chance!</RV2_EADD_Settings_AllowConflictingManualInteractions_Tip>
     <RV2_EADD_Settings_AllowGoalSwitchersToProposeConflicting>Allow goal-switchers to propose conflicting paths</RV2_EADD_Settings_AllowGoalSwitchersToProposeConflicting>
     <RV2_EADD_Settings_AllowGoalSwitchersToProposeConflicting_Tip>Goal-switching predators (usually from the "Mischievous" quirk) can propose conflicting vore paths. These will switch to be non-conflicting. Applies to both manual and automatic vore.</RV2_EADD_Settings_AllowGoalSwitchersToProposeConflicting_Tip>
+    <RV2_EADD_Settings_PathConflictsIgnoreDesignations>Path conflicts ignore designations</RV2_EADD_Settings_PathConflictsIgnoreDesignations>
+    <RV2_EADD_Settings_PathConflictsIgnoreDesignations_Tip>If enabled, ignore designations for prey when resolving path conflicts. Overrides the above two settings in cases where it is necessary to prevent a conflict. Also stops goal-switching predators from making a path switch if it would cause a conflict that violates designations, unless the default option to make goal-switchers ignore designations is enabled.</RV2_EADD_Settings_PathConflictsIgnoreDesignations_Tip>
+
+    <RV2_EADD_Settings_AccidentalDigestionHeader>Accidental Digestion</RV2_EADD_Settings_AccidentalDigestionHeader>
+
+    <RV2_EADD_Settings_EnableAccidentalDigestion>Enable accidental digestion</RV2_EADD_Settings_EnableAccidentalDigestion>
+    <RV2_EADD_Settings_EnableAccidentalDigestion_Tip>Predators with endo prey who are sleeping, have reduced consciousness, or are under certain other conditions may randomly switch to a fatal goal, and their prey will have to get their attention to make them switch back.</RV2_EADD_Settings_EnableAccidentalDigestion_Tip>
+    <RV2_EADD_Settings_BaseAccidentalDigestionTickChance>Base accidental digestion chance</RV2_EADD_Settings_BaseAccidentalDigestionTickChance>
+    <RV2_EADD_Settings_BaseAccidentalDigestionTickChance_Tip>The base chance per rare game tick (there are 10 per in-game hour) that a predator will start accidentally digesting endo prey. The chance is rolled independently per-prey (or per "part" if path conflicts are enabled), and is only rolled if a predator is in an applicable state/situation (for example, sleeping). The chance may be modified based on the predator's state and quirks.</RV2_EADD_Settings_BaseAccidentalDigestionTickChance_Tip>
+    <RV2_EADD_Settings_AccidentalDigestionChanceExample>Total chance over {0} ticks: {1}%</RV2_EADD_Settings_AccidentalDigestionChanceExample>
+    <RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip>If accidental digestion was rolled for at the base chance for this many ticks in a row, this is the percent chance it would happen. For reference, the default temproray hold oral vore path has prey in the stomach for 36 ticks.</RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip>
 
 </LanguageData>
