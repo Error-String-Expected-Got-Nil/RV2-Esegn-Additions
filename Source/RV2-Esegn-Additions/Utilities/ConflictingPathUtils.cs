@@ -70,12 +70,19 @@ namespace RV2_Esegn_Additions.Utilities
         // conflicting record, so the one who's path gets switched to.
         public static void CheckAndResolveOtherRecords(VoreTrackerRecord givenRecord)
         {
+            var recordsToResolve = new List<VoreTrackerRecord>();
+            
             foreach (var record in givenRecord.Predator.PawnData().VoreTracker.VoreTrackerRecords)
             {
                 if (record == givenRecord) continue;
                 
                 if (PathConflictsWithRecord(record, givenRecord.VorePath.def)) 
-                    ResolvePathConflict(record, givenRecord);
+                    recordsToResolve.Add(record);
+            }
+
+            foreach (var record in recordsToResolve)
+            {
+                ResolvePathConflict(record, givenRecord);
             }
         }
 
@@ -92,14 +99,14 @@ namespace RV2_Esegn_Additions.Utilities
             Patch_JumpUtility.SkipNextPathJumpNotification = true;
             jump.Jump(record, true);
             
-            string message = "RV2_CPI_Text_ConflictingPathResolutionSwitch".Translate(
+            string message = "RV2_EADD_Text_ConflictingPathResolutionSwitch".Translate(
                 record.Predator.Named("PREDATOR"),
                 record.Prey.Named("PREY"),
                 record.VoreGoal.LabelCap.Named("OLDGOAL"),
                 conflictingRecord.VoreGoal.LabelCap.Named("NEWGOAL")
             );
             NotificationUtility.DoNotification(RV2Mod.Settings.fineTuning.GoalSwitchNotification, message, 
-                "RV2_CPI_Text_ConflictingPathResolutionSwitch_Key".Translate());
+                "RV2_EADD_Text_ConflictingPathResolutionSwitch_Key".Translate());
             
             // Have to manually do interactions and add prey memories since for some reason that isn't handled
             // by JumpUtility

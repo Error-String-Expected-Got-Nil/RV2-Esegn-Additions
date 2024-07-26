@@ -11,7 +11,7 @@ namespace RV2_Esegn_Additions
         static Startup()
         {
             Harmony.DEBUG = false;
-            Harmony harmony = new Harmony("RV2_Esegn_CPI");
+            Harmony harmony = new Harmony("RV2_Esegn_Additions");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
     }

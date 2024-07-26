@@ -22,7 +22,7 @@ namespace RV2_Esegn_Additions
                 if (predator.QuirkManager()?.HasSpecialFlag("EnableGoalSwitching") == true
                     && RV2_EsegnAdditions_Settings.eadd.AllowGoalSwitchersToProposeConflicting) return; 
                 
-                reason = "RV2_CPI_Text_PathInvalidConflicting".Translate();
+                reason = "RV2_EADD_Text_PathInvalidConflicting".Translate();
                 __result = false;
             }
         }
