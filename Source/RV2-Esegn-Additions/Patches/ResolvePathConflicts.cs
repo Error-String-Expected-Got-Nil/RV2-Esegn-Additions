@@ -6,7 +6,7 @@ using Verse;
 namespace RV2_Esegn_Additions
 {
     [HarmonyPatch(typeof(VoreTrackerRecord))]
-    public class Patch_VoreTrackerRecord
+    public class Patch_VoreTrackerRecord_ResolvePathConflicts
     {
         // Prevents a normal path jump if the started path is already conflicting
         [HarmonyPatch(nameof(VoreTrackerRecord.Initialize))]
@@ -57,17 +57,17 @@ namespace RV2_Esegn_Additions
     // Only works for automatic jumps, but I don't think the manual jump feature even works? Might need to look into
     // that.
     [HarmonyPatch(typeof(VoreTracker))]
-    public class Patch_VoreTracker
+    public class Patch_VoreTracker_ResolvePathConflicts
     {
         [HarmonyPatch(nameof(VoreTracker.SplitOffNewVore))]
         [HarmonyPostfix]
         public static void Patch_SplitOffNewVore(VoreTrackerRecord __result)
         {
             if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
-            if (Patch_VoreTrackerRecord.VoreJumpFlag)
+            if (Patch_VoreTrackerRecord_ResolvePathConflicts.VoreJumpFlag)
             {
                 ConflictingPathUtils.CheckAndResolveOtherRecords(__result);
-                Patch_VoreTrackerRecord.VoreJumpFlag = false;
+                Patch_VoreTrackerRecord_ResolvePathConflicts.VoreJumpFlag = false;
             }
         }
     }

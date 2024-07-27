@@ -8,12 +8,17 @@ namespace RV2_Esegn_Additions
     [HarmonyPatch(typeof(VorePathDef))]
     public class Patch_VorePathDef
     {
+        public static bool DisablePathConflictChecks = false; 
+        
         [HarmonyPatch(nameof(VorePathDef.IsValid))]
         [HarmonyPostfix]
         public static void Postfix_IsValid(Pawn predator, Pawn prey, out string reason, bool isForAuto, 
             bool ignoreDesignations, bool ignoreRules, VorePathDef __instance, ref bool __result)
         {
             reason = null;
+
+            if (DisablePathConflictChecks) return;
+            
             if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
             
             if (ConflictingPathUtils.PathConflictsWithAnyActiveVore(predator, __instance, out var conflictingRecord))

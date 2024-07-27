@@ -21,6 +21,8 @@
     <RV2_EADD_Settings_BaseAccidentalDigestionTickChance>Base accidental digestion chance</RV2_EADD_Settings_BaseAccidentalDigestionTickChance>
     <RV2_EADD_Settings_BaseAccidentalDigestionTickChance_Tip>The base chance per rare game tick (there are 10 per in-game hour) that a predator will start accidentally digesting endo prey. The chance is rolled independently per-prey (or per "part" if path conflicts are enabled), and is only rolled if a predator is in an applicable state/situation (for example, sleeping). The chance may be modified based on the predator's state and quirks.</RV2_EADD_Settings_BaseAccidentalDigestionTickChance_Tip>
     <RV2_EADD_Settings_AccidentalDigestionChanceExample>Total chance over {0} ticks: {1}%</RV2_EADD_Settings_AccidentalDigestionChanceExample>
-    <RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip>If accidental digestion was rolled for at the base chance for this many ticks in a row, this is the percent chance it would happen. For reference, the default temproray hold oral vore path has prey in the stomach for 36 ticks.</RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip>
+    <RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip>If accidental digestion was rolled for at the base chance for this many ticks in a row, this is the percent chance it would happen. For reference, the default temporary hold oral vore path has prey in the stomach for 36 ticks.</RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip>
+    <RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations>Accidental digestion ignores designations</RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations>
+    <RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations_Tip>If enabled, accidental digestion can happen to prey even if they are designated with fatal disabled.</RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations_Tip>
 
 </LanguageData>

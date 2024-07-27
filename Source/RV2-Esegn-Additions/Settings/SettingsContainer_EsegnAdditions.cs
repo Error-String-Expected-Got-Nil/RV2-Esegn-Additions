@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using RimVore2;
 using UnityEngine;
 using Verse;
@@ -15,6 +14,7 @@ namespace RV2_Esegn_Additions
 
         private BoolSmartSetting enableAccidentalDigestion;
         private FloatSmartSetting baseAccidentalDigestionTickChance;
+        private BoolSmartSetting accidentalDigestionIgnoresDesignations;
 
         public bool EnableVorePathConflicts => enableVorePathConflicts.value;
         public bool AllowConflictingManualInteractions => allowConflictingManualInteractions.value;
@@ -23,6 +23,7 @@ namespace RV2_Esegn_Additions
 
         public bool EnableAccidentalDigestion => enableAccidentalDigestion.value;
         public float BaseAccidentalDigestionTickChance => baseAccidentalDigestionTickChance.value / 100f;
+        public bool AccidentalDigestionIgnoresDesignations => accidentalDigestionIgnoresDesignations.value;
 
         public override void Reset()
         {
@@ -33,6 +34,7 @@ namespace RV2_Esegn_Additions
 
             enableAccidentalDigestion = null;
             baseAccidentalDigestionTickChance = null;
+            accidentalDigestionIgnoresDesignations = null;
             
             EnsureSmartSettingDefinition();
         }
@@ -64,6 +66,10 @@ namespace RV2_Esegn_Additions
                     "RV2_EADD_Settings_BaseAccidentalDigestionTickChance", 0.46f, 0.46f,
                     0f, 100f, "RV2_EADD_Settings_BaseAccidentalDigestionTickChance_Tip", 
                     "0.00", "%");
+            if (accidentalDigestionIgnoresDesignations == null || accidentalDigestionIgnoresDesignations.IsInvalid())
+                accidentalDigestionIgnoresDesignations = new BoolSmartSetting(
+                    "RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations", false, false,
+                    "RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations_Tip");
         }
         
         private bool heightStale = true;
@@ -103,6 +109,7 @@ namespace RV2_Esegn_Additions
                         2)),
                 -1,
                 "RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip".Translate());
+            accidentalDigestionIgnoresDesignations.DoSetting(list);
 
             list.EndScrollView(ref height, ref heightStale);
         }
@@ -125,6 +132,8 @@ namespace RV2_Esegn_Additions
             Scribe_Deep.Look(ref enableAccidentalDigestion, "EnableAccidentalDigestion", new object[0]);
             Scribe_Deep.Look(ref baseAccidentalDigestionTickChance, "BaseAccidentalDigestionTickChance", 
                 new object[0]);
+            Scribe_Deep.Look(ref accidentalDigestionIgnoresDesignations, 
+                "AccidentalDigestionIgnoresDesignations", new object[0]);
             
             PostExposeData();
         }
