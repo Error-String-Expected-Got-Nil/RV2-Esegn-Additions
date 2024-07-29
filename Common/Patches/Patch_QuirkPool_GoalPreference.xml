@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/RimVore2.QuirkDef[defName="GoalPreference_Prey_Digest_Obsessed"]/comps</xpath>
+        <value>
+            <li Class="RimVore2.QuirkComp_PostVoreMemory">
+                <keywords>
+                    <li>PawnIsPrey</li>
+                    <li>AccidentalDigestionOccurred</li>
+                </keywords>
+                <memory>RV2_EADD_AccidentalDigestion_Prey_VeryGood</memory>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/RimVore2.QuirkDef[defName="GoalPreference_Prey_Digest_Likes"]/comps</xpath>
+        <value>
+            <li Class="RimVore2.QuirkComp_PostVoreMemory">
+                <keywords>
+                    <li>PawnIsPrey</li>
+                    <li>AccidentalDigestionOccurred</li>
+                </keywords>
+                <memory>RV2_EADD_AccidentalDigestion_Prey_Good</memory>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/RimVore2.QuirkDef[defName="GoalPreference_Prey_Digest_Dislikes"]/comps</xpath>
+        <value>
+            <li Class="RimVore2.QuirkComp_PostVoreMemory">
+                <keywords>
+                    <li>PawnIsPrey</li>
+                    <li>AccidentalDigestionOccurred</li>
+                </keywords>
+                <memory>RV2_EADD_AccidentalDigestion_Prey_Bad</memory>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/RimVore2.QuirkDef[defName="GoalPreference_Prey_Digest_Refuses"]/comps</xpath>
+        <value>
+            <li Class="RimVore2.QuirkComp_PostVoreMemory">
+                <keywords>
+                    <li>PawnIsPrey</li>
+                    <li>AccidentalDigestionOccurred</li>
+                </keywords>
+                <memory>RV2_EADD_AccidentalDigestion_Prey_VeryBad</memory>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/RimVore2.QuirkDef[defName="GoalPreference_Predator_Digest_Obsessed"]/comps</xpath>
+        <value>
+            <li Class="RimVore2.QuirkComp_PostVoreMemory">
+                <keywords>
+                    <li>PawnIsPredator</li>
+                    <li>AccidentalDigestionOccurred</li>
+                </keywords>
+                <memory>RV2_EADD_AccidentalDigestion_Pred_VeryGood</memory>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/RimVore2.QuirkDef[defName="GoalPreference_Predator_Digest_Likes"]/comps</xpath>
+        <value>
+            <li Class="RimVore2.QuirkComp_PostVoreMemory">
+                <keywords>
+                    <li>PawnIsPredator</li>
+                    <li>AccidentalDigestionOccurred</li>
+                </keywords>
+                <memory>RV2_EADD_AccidentalDigestion_Pred_Good</memory>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/RimVore2.QuirkDef[defName="GoalPreference_Predator_Digest_Dislikes"]/comps</xpath>
+        <value>
+            <li Class="RimVore2.QuirkComp_PostVoreMemory">
+                <keywords>
+                    <li>PawnIsPredator</li>
+                    <li>AccidentalDigestionOccurred</li>
+                </keywords>
+                <memory>RV2_EADD_AccidentalDigestion_Pred_Bad</memory>
+            </li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/RimVore2.QuirkDef[defName="GoalPreference_Predator_Digest_Refuses"]/comps</xpath>
+        <value>
+            <li Class="RimVore2.QuirkComp_PostVoreMemory">
+                <keywords>
+                    <li>PawnIsPredator</li>
+                    <li>AccidentalDigestionOccurred</li>
+                </keywords>
+                <memory>RV2_EADD_AccidentalDigestion_Pred_VeryBad</memory>
+            </li>
+        </value>
+    </Operation>
+</Patch>

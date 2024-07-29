@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <ThoughtDef ParentName="RV2_QuirkMemory_Base">
+        <defName>RV2_EADD_AccidentalDigestion_Prey_VeryGood</defName>
+        <stages>
+            <li>
+                <label>Loved that {0} accidentally digested me</label>
+                <description>We planned on doing it one way, but their body knew what I *really* wanted~</description>
+                <baseMoodEffect>6</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="RV2_QuirkMemory_Base">
+        <defName>RV2_EADD_AccidentalDigestion_Prey_Good</defName>
+        <stages>
+            <li>
+                <label>Liked that {0} accidentally digested me</label>
+                <description>Their organs had a better idea for what to do with me!</description>
+                <baseMoodEffect>3</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="RV2_QuirkMemory_Base">
+        <defName>RV2_EADD_AccidentalDigestion_Prey_Bad</defName>
+        <stages>
+            <li>
+                <label>Disliked that {0} accidentally digested me</label>
+                <description>Be more careful next time, I'm not food!</description>
+                <baseMoodEffect>-4</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="RV2_QuirkMemory_Base">
+        <defName>RV2_EADD_AccidentalDigestion_Prey_VeryBad</defName>
+        <stages>
+            <li>
+                <label>Hated that {0} accidentally digested me</label>
+                <description>That was terrifying, please never let that happen again...</description>
+                <baseMoodEffect>-7</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="RV2_QuirkMemory_Base">
+        <defName>RV2_EADD_AccidentalDigestion_Pred_VeryGood</defName>
+        <stages>
+            <li>
+                <label>Loved accidentally digesting {0}</label>
+                <description>It looks like my body had a better use for you!</description>
+                <baseMoodEffect>6</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="RV2_QuirkMemory_Base">
+        <defName>RV2_EADD_AccidentalDigestion_Pred_Good</defName>
+        <stages>
+            <li>
+                <label>Liked accidentally digesting {0}</label>
+                <description>That wasn't quite what I had in mind, but I'll take it~</description>
+                <baseMoodEffect>3</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="RV2_QuirkMemory_Base">
+        <defName>RV2_EADD_AccidentalDigestion_Pred_Bad</defName>
+        <stages>
+            <li>
+                <label>Disliked accidentally digesting {0}</label>
+                <description>Oops, that wasn't supposed to happen.</description>
+                <baseMoodEffect>-4</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="RV2_QuirkMemory_Base">
+        <defName>RV2_EADD_AccidentalDigestion_Pred_VeryBad</defName>
+        <stages>
+            <li>
+                <label>Hated accidentally digesting {0}</label>
+                <description>I should have been more careful...</description>
+                <baseMoodEffect>-7</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+</Defs>

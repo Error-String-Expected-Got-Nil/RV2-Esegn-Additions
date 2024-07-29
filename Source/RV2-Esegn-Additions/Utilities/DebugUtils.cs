@@ -58,5 +58,23 @@ namespace RV2_Esegn_Additions.Utilities
                 RV2Log.Message(path.defName);
             }
         }
+
+        [DebugAction("RV2-Esegn", "Add accidental digestion flags",
+            actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void AddAccidentalDigestionFlags(Pawn predator)
+        {
+            if ((predator.PawnData()?.VoreTracker?.VoreTrackerRecords.Count ?? 0) == 0)
+            {
+                RV2Log.Message("Predator had no records to flag");
+                return;
+            }
+
+            foreach (var record in predator.PawnData().VoreTracker.VoreTrackerRecords)
+            {
+                AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
+                    .Add(new WeakReference<VoreTrackerRecord>(record));
+                RV2Log.Message("Added accidental digestion flag for record " + record.loadID);
+            }
+        }
     }
 }
