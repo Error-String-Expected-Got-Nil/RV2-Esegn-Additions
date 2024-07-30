@@ -24,5 +24,7 @@
     <RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip>If accidental digestion was rolled for at the base chance for this many ticks in a row, this is the percent chance it would happen. For reference, the default temporary hold oral vore path has prey in the stomach for 36 ticks.</RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip>
     <RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations>Accidental digestion ignores designations</RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations>
     <RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations_Tip>If enabled, accidental digestion can happen to prey even if they are designated with fatal disabled.</RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations_Tip>
+    <RV2_EADD_Settings_AccidentalDigestionNotificationType>Accidental digestion notification type</RV2_EADD_Settings_AccidentalDigestionNotificationType>
+    <RV2_EADD_Settings_AccidentalDigestionNotificationType_Tip>What kind of notification, if any, you want to see when accidental digestion happens. Set it to "None" if you'd like it to be as much a surprise for you as it is for the predator!</RV2_EADD_Settings_AccidentalDigestionNotificationType_Tip>
 
 </LanguageData>

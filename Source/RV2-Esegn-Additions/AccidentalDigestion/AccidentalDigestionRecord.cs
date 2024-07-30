@@ -13,7 +13,7 @@ namespace RV2_Esegn_Additions
         public Pawn Predator;
         public string JumpKey;
 
-        public bool IsAccidentallyDigesting => SwitchedRecords.Count > 0;
+        public bool IsAccidentallyDigesting { get; private set; } = false;
 
         // Assumes the current stage of the initial record has a jump key.
         public AccidentalDigestionRecord(VoreTrackerRecord initial)
@@ -23,7 +23,7 @@ namespace RV2_Esegn_Additions
             AddVoreTrackerRecord(initial);
         }
 
-        public void RollForAccidentalDigestion()
+        public void RollForAccidentalDigestion(uint count = 1)
         {
             
         }
@@ -34,27 +34,60 @@ namespace RV2_Esegn_Additions
 
             foreach (var originalRecord in OriginalRecords)
             {
-                var sameTypePaths = 
-                    potentialPaths.FindAll(path => path.voreType == originalRecord.VoreType);
-                
-                // Prefer paths that are the same type as the original path, if possible.
-                var targetPath = sameTypePaths.Empty() ? sameTypePaths.RandomElement() 
-                    : potentialPaths.RandomElement();
+                MakeSwitchedRecord(potentialPaths, originalRecord);
 
-                var tracker = originalRecord.VoreTracker;
-                tracker.UntrackVore(originalRecord);
-                var newRecord = tracker.SplitOffNewVore(originalRecord, originalRecord.Prey,
-                    new VorePath(targetPath),
-                    targetPath.stages.Find(stage => stage.jumpKey == JumpKey).index, true);
-                
-                AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
-                    .Add(new WeakReference<VoreTrackerRecord>(originalRecord));
-                AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
-                    .Add(new WeakReference<VoreTrackerRecord>(newRecord));
-
-                // Switched records should always have the same index as their original, and vice-versa.
-                SwitchedRecords.Add(newRecord);
+                // TODO: Social memories?
+                // TODO: NOTE: For checking if accidental digestion can be reversed, use the "IncreaseDigestionProgress" RollAction
             }
+            
+            IsAccidentallyDigesting = true;
+        }
+
+        private void MakeSwitchedRecord(List<VorePathDef> potentialPaths, VoreTrackerRecord originalRecord)
+        {
+            var sameTypePaths = 
+                potentialPaths.FindAll(path => path.voreType == originalRecord.VoreType);
+            
+            // Prefer paths that are the same type as the original path, if possible.
+            var targetPath = sameTypePaths.Empty() ? potentialPaths.RandomElement()
+                : sameTypePaths.RandomElement();
+
+            var tracker = originalRecord.VoreTracker;
+            tracker.UntrackVore(originalRecord);
+
+            // Uses a patch to make the next ShouldStruggle() check act as if the vore was forced even if it
+            // isn't, so that prey will automatically start struggling when accidental digestion happens.
+            Patch_SettingsContainer_Rules.MakeNextShouldStruggleCheckForced = true;
+            var newRecord = tracker.SplitOffNewVore(originalRecord, originalRecord.Prey,
+                new VorePath(targetPath),
+                targetPath.stages.Find(stage => stage.jumpKey == JumpKey).index, true);
+            
+            AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
+                .Add(new WeakReference<VoreTrackerRecord>(originalRecord));
+            AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
+                .Add(new WeakReference<VoreTrackerRecord>(newRecord));
+
+            // Switched records should always have the same index as their original, and vice-versa.
+            SwitchedRecords.Add(newRecord);
+            
+            var rulePacks = new List<RulePackDef>();
+            var typeRules = newRecord.VorePath.VoreType?.relatedRulePacks;
+            var goalRules = newRecord.VorePath.VoreGoal?.relatedRulePacks;
+            if (typeRules != null)
+                rulePacks.AddRange(typeRules);
+            if (goalRules != null)
+                rulePacks.AddRange(goalRules);
+            var interaction = new PlayLogEntry_Interaction(
+                RV2_EADD_Common.EaddInteractionDefOf.RV2_EADD_AccidentalDigestionInteraction, 
+                newRecord.Predator, newRecord.Prey, rulePacks);
+            Find.PlayLog.Add(interaction);
+            
+            NotificationUtility.DoNotification(RV2_EsegnAdditions_Settings.eadd.AccidentalDigestionNotificationType,
+                "RV2_EADD_Text_AccidentalDigestionNotification".Translate(
+                        newRecord.Predator.Named("PREDATOR"),
+                        newRecord.Prey.Named("PREY"),
+                        newRecord.VoreGoal.Named("GOAL")
+                    ), "RV2_EADD_Text_AccidentalDigestionNotification_Key".Translate());
         }
 
         // TODO: Any extra work necessary for adding a record (mainly if accidental digestion is already underway)

@@ -21,7 +21,6 @@ namespace RV2_Esegn_Additions
             
             if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
             
-            // TODO: Make paths not conflict if the conflicting path is caused by accidental digestion?
             if (ConflictingPathUtils.PathConflictsWithAnyActiveVore(predator, __instance, out var conflictingRecord))
             {
                 if (!RV2_EsegnAdditions_Settings.eadd.PathConflictsIgnoreDesignations

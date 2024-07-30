@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RimVore2;
 using Verse;
 
@@ -9,12 +8,7 @@ namespace RV2_Esegn_Additions
     {
         private List<AccidentalDigestionRecord> _records = new List<AccidentalDigestionRecord>();
 
-        public Pawn Predator;
-        
-        public AccidentalDigestionTracker(Pawn predator)
-        {
-            Predator = predator;
-        }
+        public bool IsEmpty => _records.Empty();
         
         // This function is a gangly mess and I am not proud of it.
         public void UpdateRecord(VoreTrackerRecord record)
@@ -62,7 +56,6 @@ namespace RV2_Esegn_Additions
         public void ExposeData()
         {
             Scribe_Collections.Look(ref _records, nameof(_records), LookMode.Deep);
-            Scribe_References.Look(ref Predator, nameof(Predator), true);
         }
     }
 }

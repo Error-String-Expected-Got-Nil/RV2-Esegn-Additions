@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <InteractionDef>
+        <defName>RV2_EADD_AccidentalDigestionInteraction</defName>
+        <label>accidental digestion</label>
+        <symbol>Motes/SpeechSymbols/GoalSwitched</symbol>
+        <logRulesInitiator>
+            <rulesStrings>
+              <li>r_logentry->[INITIATOR_nameDef] accidentally started digesting [RECIPIENT_nameDef]! -> </li>
+            </rulesStrings>
+          </logRulesInitiator>
+    </InteractionDef>
+</Defs>

@@ -7,4 +7,7 @@
     <RV2_EADD_Text_ConflictingPathResolutionSwitch_Key>Conflicting vore path switch</RV2_EADD_Text_ConflictingPathResolutionSwitch_Key>
     <RV2_EADD_Text_ConflictingPathResolutionSwitch>{PREDATOR} has switched vore goal for {PREY} to {NEWGOAL} because {OLDGOAL} conflicted with another active path.</RV2_EADD_Text_ConflictingPathResolutionSwitch>
 
+    <RV2_EADD_Text_AccidentalDigestionNotification_Key>Accidental digestion</RV2_EADD_Text_AccidentalDigestionNotification_Key>
+    <RV2_EADD_Text_AccidentalDigestionNotification>{PREDATOR} has accidentally switched to fatal goal {GOAL} for their prey {PREY}!</RV2_EADD_Text_AccidentalDigestionNotification>
+
 </LanguageData>

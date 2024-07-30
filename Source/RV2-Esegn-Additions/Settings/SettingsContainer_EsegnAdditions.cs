@@ -15,6 +15,7 @@ namespace RV2_Esegn_Additions
         private BoolSmartSetting enableAccidentalDigestion;
         private FloatSmartSetting baseAccidentalDigestionTickChance;
         private BoolSmartSetting accidentalDigestionIgnoresDesignations;
+        private EnumSmartSetting<NotificationType> accidentalDigestionNotificationType;
 
         public bool EnableVorePathConflicts => enableVorePathConflicts.value;
         public bool AllowConflictingManualInteractions => allowConflictingManualInteractions.value;
@@ -24,6 +25,7 @@ namespace RV2_Esegn_Additions
         public bool EnableAccidentalDigestion => enableAccidentalDigestion.value;
         public float BaseAccidentalDigestionTickChance => baseAccidentalDigestionTickChance.value / 100f;
         public bool AccidentalDigestionIgnoresDesignations => accidentalDigestionIgnoresDesignations.value;
+        public NotificationType AccidentalDigestionNotificationType => accidentalDigestionNotificationType.value;
 
         public override void Reset()
         {
@@ -35,6 +37,7 @@ namespace RV2_Esegn_Additions
             enableAccidentalDigestion = null;
             baseAccidentalDigestionTickChance = null;
             accidentalDigestionIgnoresDesignations = null;
+            accidentalDigestionNotificationType = null;
             
             EnsureSmartSettingDefinition();
         }
@@ -70,6 +73,11 @@ namespace RV2_Esegn_Additions
                 accidentalDigestionIgnoresDesignations = new BoolSmartSetting(
                     "RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations", false, false,
                     "RV2_EADD_Settings_AccidentalDigestionIgnoresDesignations_Tip");
+            if (accidentalDigestionNotificationType == null || accidentalDigestionNotificationType.IsInvalid())
+                accidentalDigestionNotificationType = new EnumSmartSetting<NotificationType>(
+                    "RV2_EADD_Settings_AccidentalDigestionNotificationType",
+                    NotificationType.MessageNeutral, NotificationType.MessageNeutral,
+                    "RV2_EADD_Settings_AccidentalDigestionNotificationType_Tip");
         }
         
         private bool heightStale = true;
@@ -99,19 +107,21 @@ namespace RV2_Esegn_Additions
             baseAccidentalDigestionTickChance.DoSetting(list);
             list.Label(
                 "RV2_EADD_Settings_AccidentalDigestionChanceExample".Translate(18, 
-                    Math.Round((1f - Math.Pow(1f - BaseAccidentalDigestionTickChance, 18)) * 100f, 
-                        2)),
-                -1,
+                    ChanceInRolls(18, BaseAccidentalDigestionTickChance)), -1,
                 "RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip".Translate());
             list.Label(
                 "RV2_EADD_Settings_AccidentalDigestionChanceExample".Translate(36,
-                    Math.Round((1f - Math.Pow(1f - BaseAccidentalDigestionTickChance, 36)) * 100f, 
-                        2)),
-                -1,
+                    ChanceInRolls(18, BaseAccidentalDigestionTickChance)), -1,
                 "RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip".Translate());
             accidentalDigestionIgnoresDesignations.DoSetting(list);
+            accidentalDigestionNotificationType.DoSetting(list);
 
             list.EndScrollView(ref height, ref heightStale);
+        }
+
+        private double ChanceInRolls(uint numRolls, float chance)
+        {
+            return Math.Round((1f - Math.Pow(1f - chance, numRolls)) * 100f, 2);
         }
         
         public override void ExposeData()
@@ -121,19 +131,15 @@ namespace RV2_Esegn_Additions
                 EnsureSmartSettingDefinition();
             }
 
-            Scribe_Deep.Look(ref enableVorePathConflicts, "EnableVorePathConflicts", new object[0]);
-            Scribe_Deep.Look(ref allowConflictingManualInteractions, "AllowConflictingManualInteractions",
-                new object[0]);
-            Scribe_Deep.Look(ref allowGoalSwitchersToProposeConflicting, "AllowGoalSwitchersToProposeConflicting", 
-                new object[0]);
-            Scribe_Deep.Look(ref pathConflictsIgnoreDesignations, "PathConflictsIgnoreDesignations", 
-                new object[0]);
+            Scribe_Deep.Look(ref enableVorePathConflicts, "EnableVorePathConflicts");
+            Scribe_Deep.Look(ref allowConflictingManualInteractions, "AllowConflictingManualInteractions");
+            Scribe_Deep.Look(ref allowGoalSwitchersToProposeConflicting, "AllowGoalSwitchersToProposeConflicting");
+            Scribe_Deep.Look(ref pathConflictsIgnoreDesignations, "PathConflictsIgnoreDesignations");
 
-            Scribe_Deep.Look(ref enableAccidentalDigestion, "EnableAccidentalDigestion", new object[0]);
-            Scribe_Deep.Look(ref baseAccidentalDigestionTickChance, "BaseAccidentalDigestionTickChance", 
-                new object[0]);
-            Scribe_Deep.Look(ref accidentalDigestionIgnoresDesignations, 
-                "AccidentalDigestionIgnoresDesignations", new object[0]);
+            Scribe_Deep.Look(ref enableAccidentalDigestion, "EnableAccidentalDigestion");
+            Scribe_Deep.Look(ref baseAccidentalDigestionTickChance, "BaseAccidentalDigestionTickChance");
+            Scribe_Deep.Look(ref accidentalDigestionIgnoresDesignations, "AccidentalDigestionIgnoresDesignations");
+            Scribe_Deep.Look(ref accidentalDigestionNotificationType, "AccidentalDigestionNotificationType");
             
             PostExposeData();
         }

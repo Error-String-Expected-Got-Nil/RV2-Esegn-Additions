@@ -9,6 +9,7 @@ namespace RV2_Esegn_Additions
     {
         public static AccidentalDigestionManager Manager;
 
+        // Trackers with no records are not included when the game is saved.
         private Dictionary<int, AccidentalDigestionTracker> _trackers =
             new Dictionary<int, AccidentalDigestionTracker>();
         
@@ -32,38 +33,44 @@ namespace RV2_Esegn_Additions
 
             if (!createIfNonexistent) return null;
             
-            tracker = new AccidentalDigestionTracker(predator);
+            tracker = new AccidentalDigestionTracker();
             _trackers.Add(predator.thingIDNumber, tracker);
             return tracker;
         }
-        
-        // TODO: Check for and clear out empty AccidentalDigestionTrackers every so often, every long tick?
 
         public override void ExposeData()
         {
             base.ExposeData();
 
-            Scribe_Collections.Look(ref _trackers, nameof(_trackers), LookMode.Value, 
-                LookMode.Deep);
-            if (Scribe.mode == LoadSaveMode.LoadingVars && _trackers == null)
-                _trackers = new Dictionary<int, AccidentalDigestionTracker>();
-
             if (Scribe.mode == LoadSaveMode.Saving)
             {
+                // Save only alive references, and save them as direct references. 
                 var temp = (List<VoreTrackerRecord>) RecordsWhereAccidentalDigestionOccurred
                     .Where(weakRef => weakRef.IsAlive)
                     .Select(weakRef => weakRef.Target);
                 Scribe_Collections.Look(ref temp, nameof(RecordsWhereAccidentalDigestionOccurred), 
                     LookMode.Reference);
+
+                // Save only trackers that are not empty.
+                var temp2 = (Dictionary<int, AccidentalDigestionTracker>) _trackers
+                    .Where(tracker => !tracker.Value.IsEmpty);
+                Scribe_Collections.Look(ref temp2, nameof(_trackers), LookMode.Value, 
+                    LookMode.Deep);
             }
             else if (Scribe.mode == LoadSaveMode.LoadingVars)
             {
+                // Load as direct references...
                 var temp = new List<VoreTrackerRecord>();
                 Scribe_Collections.Look(ref temp, nameof(RecordsWhereAccidentalDigestionOccurred), 
                     LookMode.Reference);
 
+                // ...then make them weak references when putting them into the actual list.
                 RecordsWhereAccidentalDigestionOccurred = (List<WeakReference<VoreTrackerRecord>>)
                     temp.Select(vtr => new WeakReference<VoreTrackerRecord>(vtr));
+
+                if (_trackers == null) _trackers = new Dictionary<int, AccidentalDigestionTracker>();
+                Scribe_Collections.Look(ref _trackers, nameof(_trackers), LookMode.Value, 
+                    LookMode.Deep);
             }
         }
     }
