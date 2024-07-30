@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <RimVore2.QuirkPoolDef>
+        <defName>AccidentalDigestionAwareness</defName>
+        <label>Accidental digestion awareness</label>
+        <category>Digestion</category>
+        <description>These quirks determine how likely a predator is to notice they have accidentally started digesting their prey.</description>
+        <generationOrder>5</generationOrder>
+        <poolType>PickOne</poolType>
+        <quirks>
+            <li>AccidentalDigestionAwareness_VeryHigh</li>
+            <li>AccidentalDigestionAwareness_High</li>
+            <li>AccidentalDigestionAwareness_Neutral</li>
+            <li>AccidentalDigestionAwareness_Low</li>
+            <li>AccidentalDigestionAwareness_VeryLow</li>
+            <li>AccidentalDigestionAwareness_None</li>
+        </quirks>
+    </RimVore2.QuirkPoolDef>
+
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionAwareness_VeryHigh</defName>
+        <label>Vigilant</label>
+        <description>[PAWN_label] almost always has a figurative eye on [PAWN_possessive] prey, making [PAWN_objective] vastly more likely to realize if [PAWN_pronoun] is accidentally digesting [PAWN_possessive] prey.</description>
+        <rarity>Rare</rarity>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionAwareness</modifierName>
+                <modifierValue>2.5</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionAwareness_High</defName>
+        <label>Mindful</label>
+        <description>[PAWN_label] keeps [PAWN_possessive] prey in mind more than most, and is more likely to notice if something doesn't go as planned.</description>
+        <rarity>Uncommon</rarity>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionAwareness</modifierName>
+                <modifierValue>1.75</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionAwareness_Neutral</defName>
+        <label>Neutral</label>
+        <description>[PAWN_label] doesn't pay any particular attention to [PAWN_possessive] prey, but won't forget about them either.</description>
+        <rarity>Common</rarity>
+        <hidden>true</hidden>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionAwareness</modifierName>
+                <modifierValue>1</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionAwareness_Low</defName>
+        <label>Unattentive</label>
+        <description>[PAWN_label] tends not to think of [PAWN_possessive] prey as much. [PAWN_pronoun] is less likely to notice if [PAWN_pronoun] accidentally digests them.</description>
+        <rarity>Uncommon</rarity>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionAwareness</modifierName>
+                <modifierValue>0.7</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionAwareness_VeryLow</defName>
+        <label>Negligent</label>
+        <description>[PAWN_label] doesn't pay much attention to [PAWN_possessive] prey. [PAWN_pronoun] is substantially less likely to realize [PAWN_possessive] body has slipped control.</description>
+        <rarity>Rare</rarity>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionAwareness</modifierName>
+                <modifierValue>0.45</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionAwareness_None</defName>
+        <label>Oblivious</label>
+        <description>[PAWN_label] has no idea what goes on inside [PAWN_possessive] guts. [PAWN_pronoun] will never notice if [PAWN_pronoun] is accidentally digesting [PAWN_possessive] prey.</description>
+        <rarity>VeryRare</rarity>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionAwareness</modifierName>
+                <modifierValue>0</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+
+
+    <!-- ESEGN: The AccidentalDigestionControl modifier works inverse to the name. Higher multiplier, the *more* likely accidental digestion is to occur. -->
+    <!-- ESEGN: A multiplier of 0 means it cannot occur. -->
+    <RimVore2.QuirkPoolDef>
+        <defName>AccidentalDigestionControl</defName>
+        <label>Digestive control</label>
+        <category>Digestion</category>
+        <description>These quirks determine how likely a predator is to start accidentally digesting their prey.</description>
+        <generationOrder>5</generationOrder>
+        <poolType>PickOne</poolType>
+        <quirks>
+            <li>AccidentalDigestionControl_Total</li>
+            <li>AccidentalDigestionControl_VeryHigh</li>
+            <li>AccidentalDigestionControl_High</li>
+            <li>AccidentalDigestionControl_Neutral</li>
+            <li>AccidentalDigestionControl_Low</li>
+            <li>AccidentalDigestionControl_VeryLow</li>
+        </quirks>
+    </RimVore2.QuirkPoolDef>
+
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionControl_Total</defName>
+        <label>Total control</label>
+        <description>[PAWN_label] has complete control over the activities of all [PAWN_possessive] organs that can store prey. [PAWN_pronoun] will never accidentally digest anyone or anything.</description>
+        <rarity>VeryRare</rarity>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionControl</modifierName>
+                <modifierValue>0</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+    
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionControl_VeryHigh</defName>
+        <label>Firm control</label>
+        <description>[PAWN_label] has substantial mastery over [PAWN_possessive] body, and is much less likely to digest prey when [PAWN_pronoun] doesn't mean to.</description>
+        <rarity>Rare</rarity>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionControl</modifierName>
+                <modifierValue>0.5</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionControl_High</defName>
+        <label>Good control</label>
+        <description>[PAWN_label] has better control than most, and is less likely to accidentally digest [PAWN_possessive] prey.</description>
+        <rarity>Uncommon</rarity>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionControl</modifierName>
+                <modifierValue>0.75</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionControl_Neutral</defName>
+        <label>Neutral control</label>
+        <description>[PAWN_label] has average control over [PAWN_possessive] digestive system and other organs.</description>
+        <rarity>Common</rarity>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionControl</modifierName>
+                <modifierValue>1</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionControl_Low</defName>
+        <label>Poor control</label>
+        <description>[PAWN_label] doesn't have a very good grip on [PAWN_possessive] guts. Be careful when letting [PAWN_objective] devour you.</description>
+        <rarity>Uncommon</rarity>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionControl</modifierName>
+                <modifierValue>1.75</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+
+    <RimVore2.QuirkDef>
+        <defName>AccidentalDigestionControl_VeryLow</defName>
+        <label>Loose control</label>
+        <description>Getting inside [PAWN_label] is somewhat of a gamble. [PAWN_possessive] organs have a bit of a mind of their own, and they really like to gurgle prey.</description>
+        <rarity>Rare</rarity>
+        <comps>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionControl</modifierName>
+                <modifierValue>2.5</modifierValue>
+            </li>
+        </comps>
+    </RimVore2.QuirkDef>
+</Defs>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RimVore2;
 using Verse;
@@ -13,6 +14,9 @@ namespace RV2_Esegn_Additions
         public Pawn Predator;
         public string JumpKey;
 
+        private float _predatorAwarenessModifier = 1f;
+        private float _predatorControlModifier = 1f;
+
         public bool IsAccidentallyDigesting { get; private set; } = false;
 
         // Assumes the current stage of the initial record has a jump key.
@@ -20,6 +24,7 @@ namespace RV2_Esegn_Additions
         {
             Predator = initial.Predator;
             JumpKey = initial.CurrentVoreStage.def.jumpKey;
+            UpdateModifierCache();
             AddVoreTrackerRecord(initial);
         }
 
@@ -43,6 +48,31 @@ namespace RV2_Esegn_Additions
             IsAccidentallyDigesting = true;
         }
 
+        // Makes a roll to see if the predator should become aware they are accidentally digesting, returns true if yes.
+        public bool RollPredatorAwareness()
+        {
+            // If prey must struggle to make the predator aware and none are, this automatically fails.
+            if (RV2Mod.Settings.features.StrugglingEnabled
+                && RV2_EsegnAdditions_Settings.eadd.PreyMustStruggleToBeNoticed
+                && !SwitchedRecords.Any(record => record.StruggleManager.ShouldStruggle))
+                return false;
+            
+            var chance = RV2_EsegnAdditions_Settings.eadd.BasePredatorAwarenessChance;
+            chance *= _predatorAwarenessModifier;
+
+            var highestStruggle = 0f;
+            if (RV2Mod.Settings.features.StrugglingEnabled) 
+                highestStruggle = SwitchedRecords
+                    .Select(record => record.StruggleManager.StruggleProgress)
+                    .Prepend(highestStruggle)
+                    .Max();
+
+            var struggleProgressMod = highestStruggle + 1f;
+            chance *= struggleProgressMod;
+
+            return RandomUtility.GetRandomFloat() < chance;
+        }
+
         private void MakeSwitchedRecord(List<VorePathDef> potentialPaths, VoreTrackerRecord originalRecord)
         {
             var sameTypePaths = 
@@ -63,9 +93,9 @@ namespace RV2_Esegn_Additions
                 targetPath.stages.Find(stage => stage.jumpKey == JumpKey).index, true);
             
             AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
-                .Add(new WeakReference<VoreTrackerRecord>(originalRecord));
+                .Add(new Verse.WeakReference<VoreTrackerRecord>(originalRecord));
             AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
-                .Add(new WeakReference<VoreTrackerRecord>(newRecord));
+                .Add(new Verse.WeakReference<VoreTrackerRecord>(newRecord));
 
             // Switched records should always have the same index as their original, and vice-versa.
             SwitchedRecords.Add(newRecord);
@@ -88,6 +118,18 @@ namespace RV2_Esegn_Additions
                         newRecord.Prey.Named("PREY"),
                         newRecord.VoreGoal.Named("GOAL")
                     ), "RV2_EADD_Text_AccidentalDigestionNotification_Key".Translate());
+        }
+
+        // TODO: Update cache when quirk menu is closed
+        public void UpdateModifierCache()
+        {
+            _predatorAwarenessModifier = Predator.QuirkManager()?
+                .TryGetValueModifier("AccidentalDigestionAwareness",
+                ModifierOperation.Multiply, out var predAwarenessMod) == true ? predAwarenessMod : 1f;
+
+            _predatorControlModifier = Predator.QuirkManager()?
+                .TryGetValueModifier("AccidentalDigestionControl",
+                ModifierOperation.Multiply, out var predControlMod) == true ? predControlMod : 1f;
         }
 
         // TODO: Any extra work necessary for adding a record (mainly if accidental digestion is already underway)
@@ -124,6 +166,9 @@ namespace RV2_Esegn_Additions
             
             Scribe_References.Look(ref Predator, nameof(Predator), true);
             Scribe_Values.Look(ref JumpKey, nameof(JumpKey));
+            
+            Scribe_Values.Look(ref _predatorAwarenessModifier, nameof(_predatorAwarenessModifier));
+            Scribe_Values.Look(ref _predatorControlModifier, nameof(_predatorControlModifier));
         }
     }
 }

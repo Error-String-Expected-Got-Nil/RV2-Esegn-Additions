@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/RimVore2.QuirkDef[defName="StrugglePreference_Hated"]/comps</xpath>
+        <value>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionAwareness</modifierName>
+                <modifierValue>1.5</modifierValue>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/RimVore2.QuirkDef[defName="StrugglePreference_Loved"]/comps</xpath>
+        <value>
+            <li Class="RimVore2.QuirkComp_ValueModifier">
+                <modifierName>AccidentalDigestionAwareness</modifierName>
+                <modifierValue>0.7</modifierValue>
+            </li>
+        </value>
+    </Operation>
+</Patch>

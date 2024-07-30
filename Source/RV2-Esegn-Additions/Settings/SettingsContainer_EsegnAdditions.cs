@@ -16,6 +16,8 @@ namespace RV2_Esegn_Additions
         private FloatSmartSetting baseAccidentalDigestionTickChance;
         private BoolSmartSetting accidentalDigestionIgnoresDesignations;
         private EnumSmartSetting<NotificationType> accidentalDigestionNotificationType;
+        private FloatSmartSetting basePredatorAwarenessChance;
+        private BoolSmartSetting preyMustStruggleToBeNoticed;
 
         public bool EnableVorePathConflicts => enableVorePathConflicts.value;
         public bool AllowConflictingManualInteractions => allowConflictingManualInteractions.value;
@@ -26,6 +28,8 @@ namespace RV2_Esegn_Additions
         public float BaseAccidentalDigestionTickChance => baseAccidentalDigestionTickChance.value / 100f;
         public bool AccidentalDigestionIgnoresDesignations => accidentalDigestionIgnoresDesignations.value;
         public NotificationType AccidentalDigestionNotificationType => accidentalDigestionNotificationType.value;
+        public float BasePredatorAwarenessChance => basePredatorAwarenessChance.value / 100f;
+        public bool PreyMustStruggleToBeNoticed => preyMustStruggleToBeNoticed.value;
 
         public override void Reset()
         {
@@ -38,6 +42,8 @@ namespace RV2_Esegn_Additions
             baseAccidentalDigestionTickChance = null;
             accidentalDigestionIgnoresDesignations = null;
             accidentalDigestionNotificationType = null;
+            basePredatorAwarenessChance = null;
+            preyMustStruggleToBeNoticed = null;
             
             EnsureSmartSettingDefinition();
         }
@@ -66,8 +72,9 @@ namespace RV2_Esegn_Additions
                     "RV2_EADD_Settings_EnableAccidentalDigestion_Tip");
             if (baseAccidentalDigestionTickChance == null || baseAccidentalDigestionTickChance.IsInvalid())
                 baseAccidentalDigestionTickChance = new FloatSmartSetting(
-                    "RV2_EADD_Settings_BaseAccidentalDigestionTickChance", 0.46f, 0.46f,
-                    0f, 100f, "RV2_EADD_Settings_BaseAccidentalDigestionTickChance_Tip", 
+                    "RV2_EADD_Settings_BaseAccidentalDigestionTickChance", 
+                    0.46f, 0.46f, 0f, 100f, 
+                    "RV2_EADD_Settings_BaseAccidentalDigestionTickChance_Tip", 
                     "0.00", "%");
             if (accidentalDigestionIgnoresDesignations == null || accidentalDigestionIgnoresDesignations.IsInvalid())
                 accidentalDigestionIgnoresDesignations = new BoolSmartSetting(
@@ -78,6 +85,15 @@ namespace RV2_Esegn_Additions
                     "RV2_EADD_Settings_AccidentalDigestionNotificationType",
                     NotificationType.MessageNeutral, NotificationType.MessageNeutral,
                     "RV2_EADD_Settings_AccidentalDigestionNotificationType_Tip");
+            if (basePredatorAwarenessChance == null || basePredatorAwarenessChance.IsInvalid())
+                basePredatorAwarenessChance = new FloatSmartSetting(
+                    "RV2_EADD_Settings_BasePredatorAwarenessChance",
+                    2.85f, 2.85f, 0f, 100f,
+                    "RV2_EADD_Settings_BasePredatorAwarenessChance_Tip", "0.00", "%");
+            if (preyMustStruggleToBeNoticed == null || preyMustStruggleToBeNoticed.IsInvalid())
+                preyMustStruggleToBeNoticed = new BoolSmartSetting(
+                    "RV2_EADD_Settings_PreyMustStruggleToBeNoticed", true, true,
+                    "RV2_EADD_Settings_PreyMustStruggleToBeNoticed_Tip");
         }
         
         private bool heightStale = true;
@@ -111,15 +127,23 @@ namespace RV2_Esegn_Additions
                 "RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip".Translate());
             list.Label(
                 "RV2_EADD_Settings_AccidentalDigestionChanceExample".Translate(36,
-                    ChanceInRolls(18, BaseAccidentalDigestionTickChance)), -1,
+                    ChanceInRolls(36, BaseAccidentalDigestionTickChance)), -1,
                 "RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip".Translate());
             accidentalDigestionIgnoresDesignations.DoSetting(list);
             accidentalDigestionNotificationType.DoSetting(list);
+            basePredatorAwarenessChance.DoSetting(list);
+            list.Label(
+                "RV2_EADD_Settings_PredatorAwarenessChanceExample".Translate(
+                    ChanceInRolls(24, BasePredatorAwarenessChance)), -1,
+                "RV2_EADD_Settings_PredatorAwarenessChanceExample_Tip");
+            preyMustStruggleToBeNoticed.DoSetting(list);
 
             list.EndScrollView(ref height, ref heightStale);
         }
 
-        private double ChanceInRolls(uint numRolls, float chance)
+        // Calculates the total chance in numRolls rolls that at least one of the rolls will succeed, when each has the
+        // given 'chance' of happening. Also formats it as a percentage with two decimal places.
+        private static double ChanceInRolls(uint numRolls, float chance)
         {
             return Math.Round((1f - Math.Pow(1f - chance, numRolls)) * 100f, 2);
         }
@@ -140,6 +164,8 @@ namespace RV2_Esegn_Additions
             Scribe_Deep.Look(ref baseAccidentalDigestionTickChance, "BaseAccidentalDigestionTickChance");
             Scribe_Deep.Look(ref accidentalDigestionIgnoresDesignations, "AccidentalDigestionIgnoresDesignations");
             Scribe_Deep.Look(ref accidentalDigestionNotificationType, "AccidentalDigestionNotificationType");
+            Scribe_Deep.Look(ref basePredatorAwarenessChance, "BasePredatorAwarenessChance");
+            Scribe_Deep.Look(ref preyMustStruggleToBeNoticed, "PreyMustStruggleToBeNoticed");
             
             PostExposeData();
         }

@@ -10,7 +10,6 @@ namespace RV2_Esegn_Additions
 
         public bool IsEmpty => _records.Empty();
         
-        // This function is a gangly mess and I am not proud of it.
         public void UpdateRecord(VoreTrackerRecord record)
         {
             if (record.VoreGoal.IsLethal) return;
