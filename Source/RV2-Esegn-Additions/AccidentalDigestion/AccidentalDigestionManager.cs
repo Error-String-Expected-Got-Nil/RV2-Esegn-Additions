@@ -51,9 +51,10 @@ namespace RV2_Esegn_Additions
                 Scribe_Collections.Look(ref temp, nameof(RecordsWhereAccidentalDigestionOccurred), 
                     LookMode.Reference);
 
-                // Save only trackers that are not empty.
+                // Save only trackers that are not empty, or have a remaining cooldown.
                 var temp2 = (Dictionary<int, AccidentalDigestionTracker>) _trackers
-                    .Where(tracker => !tracker.Value.IsEmpty);
+                    .Where(tracker => 
+                        !tracker.Value.IsEmpty || tracker.Value.Cooldown > 0);
                 Scribe_Collections.Look(ref temp2, nameof(_trackers), LookMode.Value, 
                     LookMode.Deep);
             }

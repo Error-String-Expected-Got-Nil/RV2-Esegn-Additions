@@ -18,6 +18,9 @@ namespace RV2_Esegn_Additions
         private EnumSmartSetting<NotificationType> accidentalDigestionNotificationType;
         private FloatSmartSetting basePredatorAwarenessChance;
         private BoolSmartSetting preyMustStruggleToBeNoticed;
+        private BoolSmartSetting canAlwaysAccidentallyDigest;
+        private BoolSmartSetting longTermPreventsAccidentalDigestion;
+        private FloatSmartSetting accidentalDigestionCooldown;
 
         public bool EnableVorePathConflicts => enableVorePathConflicts.value;
         public bool AllowConflictingManualInteractions => allowConflictingManualInteractions.value;
@@ -30,6 +33,9 @@ namespace RV2_Esegn_Additions
         public NotificationType AccidentalDigestionNotificationType => accidentalDigestionNotificationType.value;
         public float BasePredatorAwarenessChance => basePredatorAwarenessChance.value / 100f;
         public bool PreyMustStruggleToBeNoticed => preyMustStruggleToBeNoticed.value;
+        public bool CanAlwaysAccidentallyDigest => canAlwaysAccidentallyDigest.value;
+        public bool LongTermPreventsAccidentalDigestion => longTermPreventsAccidentalDigestion.value;
+        public uint AccidentalDigestionCooldown => (uint) accidentalDigestionCooldown.value;
 
         public override void Reset()
         {
@@ -44,6 +50,9 @@ namespace RV2_Esegn_Additions
             accidentalDigestionNotificationType = null;
             basePredatorAwarenessChance = null;
             preyMustStruggleToBeNoticed = null;
+            canAlwaysAccidentallyDigest = null;
+            longTermPreventsAccidentalDigestion = null;
+            accidentalDigestionCooldown = null;
             
             EnsureSmartSettingDefinition();
         }
@@ -94,6 +103,19 @@ namespace RV2_Esegn_Additions
                 preyMustStruggleToBeNoticed = new BoolSmartSetting(
                     "RV2_EADD_Settings_PreyMustStruggleToBeNoticed", true, true,
                     "RV2_EADD_Settings_PreyMustStruggleToBeNoticed_Tip");
+            if (canAlwaysAccidentallyDigest == null || canAlwaysAccidentallyDigest.IsInvalid())
+                canAlwaysAccidentallyDigest = new BoolSmartSetting(
+                    "RV2_EADD_Settings_CanAlwaysAccidentallyDigest", false, false,
+                    "RV2_EADD_Settings_CanAlwaysAccidentallyDigest_Tip");
+            if (longTermPreventsAccidentalDigestion == null || longTermPreventsAccidentalDigestion.IsInvalid())
+                longTermPreventsAccidentalDigestion = new BoolSmartSetting(
+                    "RV2_EADD_Settings_LongTermPreventsAccidentalDigestion", true, true,
+                    "RV2_EADD_Settings_LongTermPreventsAccidentalDigestion_Tip");
+            if (accidentalDigestionCooldown == null || accidentalDigestionCooldown.IsInvalid())
+                accidentalDigestionCooldown = new FloatSmartSetting(
+                    "RV2_EADD_Settings_AccidentalDigestionCooldown",
+                    30000, 30000, 0, 120000,
+                    "RV2_EADD_Settings_AccidentalDigestionCooldown_Tip", "0");
         }
         
         private bool heightStale = true;
@@ -137,6 +159,9 @@ namespace RV2_Esegn_Additions
                     ChanceInRolls(24, BasePredatorAwarenessChance)), -1,
                 "RV2_EADD_Settings_PredatorAwarenessChanceExample_Tip");
             preyMustStruggleToBeNoticed.DoSetting(list);
+            canAlwaysAccidentallyDigest.DoSetting(list);
+            longTermPreventsAccidentalDigestion.DoSetting(list);
+            accidentalDigestionCooldown.DoSetting(list);
 
             list.EndScrollView(ref height, ref heightStale);
         }
@@ -166,6 +191,9 @@ namespace RV2_Esegn_Additions
             Scribe_Deep.Look(ref accidentalDigestionNotificationType, "AccidentalDigestionNotificationType");
             Scribe_Deep.Look(ref basePredatorAwarenessChance, "BasePredatorAwarenessChance");
             Scribe_Deep.Look(ref preyMustStruggleToBeNoticed, "PreyMustStruggleToBeNoticed");
+            Scribe_Deep.Look(ref canAlwaysAccidentallyDigest, "CanAlwaysAccidentallyDigest");
+            Scribe_Deep.Look(ref longTermPreventsAccidentalDigestion, "LongTermPreventsAccidentalDigestion");
+            Scribe_Deep.Look(ref accidentalDigestionCooldown, "AccidentalDigestionCooldown");
             
             PostExposeData();
         }

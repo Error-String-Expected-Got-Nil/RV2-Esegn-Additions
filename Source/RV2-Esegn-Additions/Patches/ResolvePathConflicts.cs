@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using RimVore2;
 using RV2_Esegn_Additions.Utilities;
-using Verse;
 
 namespace RV2_Esegn_Additions
 {

@@ -1,7 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RimVore2;
+using RimWorld;
 using Verse;
+
+#if v1_4
+using static RV2_Esegn_Additions.Utilities.CompatibilityUtils;
+#endif
 
 namespace RV2_Esegn_Additions
 {
@@ -12,12 +17,15 @@ namespace RV2_Esegn_Additions
 
         public Pawn Predator;
         public string JumpKey;
+        public AccidentalDigestionTracker Tracker;
 
         private float _predatorAwarenessModifier = 1f;
         private float _predatorControlModifier = 1f;
-        private List<VorePathDef> _potentialPaths = new List<VorePathDef>();
+        private List<VorePathDef> _potentialPaths;
 
         public bool IsAccidentallyDigesting { get; private set; } = false;
+        public bool PredatorIsAware { get; private set; } = false;
+        public VoreGoalDef VoreGoal { get; private set; } = null;
 
         // Assumes the current stage of the initial record has a jump key.
         public AccidentalDigestionRecord(VoreTrackerRecord initial)
@@ -26,27 +34,34 @@ namespace RV2_Esegn_Additions
             JumpKey = initial.CurrentVoreStage.def.jumpKey;
             UpdateModifierCache();
             _potentialPaths = PotentialTargetPaths(CurrentAndPotentialPrey());
+            Tracker = AccidentalDigestionManager.Manager.GetTracker(Predator, false);
             AddVoreTrackerRecord(initial);
         }
 
-        public void RollForAccidentalDigestion(uint count = 1)
+        public bool CanBeginAccidentalDigestion()
         {
-            
+            if (!RV2_EsegnAdditions_Settings.eadd.EnableAccidentalDigestion) return false;
+            if (Tracker.Cooldown > 0) return false;
+            if (_potentialPaths.Empty()) return false;
+
+            if (RV2_EsegnAdditions_Settings.eadd.LongTermPreventsAccidentalDigestion
+                && OriginalRecords.Any(record => record.CurrentVoreStage.def.passConditions
+                    .Any(condition => condition is StagePassCondition_Manual)))
+                return false;
+
+            if (RV2_EsegnAdditions_Settings.eadd.CanAlwaysAccidentallyDigest) return true;
+            if (Predator.needs.rest.Resting) return true;
+            if (Predator.health.capacities.GetLevel(PawnCapacityDefOf.Consciousness) <= 0.9f) return true;
+
+            return false;
         }
 
-        public void BeginAccidentalDigestion(List<VorePathDef> potentialPaths)
+        public bool RollForAccidentalDigestion()
         {
-            if (potentialPaths.Empty()) return;
+            var chance = RV2_EsegnAdditions_Settings.eadd.BaseAccidentalDigestionTickChance;
+            chance *= _predatorControlModifier;
 
-            foreach (var originalRecord in OriginalRecords)
-            {
-                MakeSwitchedRecord(potentialPaths, originalRecord);
-
-                // TODO: Social memories?
-                // TODO: NOTE: For checking if accidental digestion can be reversed, use the "IncreaseDigestionProgress" RollAction
-            }
-            
-            IsAccidentallyDigesting = true;
+            return RandomUtility.GetRandomFloat() < chance;
         }
 
         // Makes a roll to see if the predator should become aware they are accidentally digesting, returns true if yes.
@@ -73,6 +88,25 @@ namespace RV2_Esegn_Additions
 
             return RandomUtility.GetRandomFloat() < chance;
         }
+        
+        public void BeginAccidentalDigestion(List<VorePathDef> potentialPaths)
+        {
+            if (potentialPaths.Empty()) return;
+
+            VoreGoal = VoreGoal ?? potentialPaths.Select(path => path.voreGoal).RandomElement();
+
+            foreach (var originalRecord in OriginalRecords)
+            {
+                MakeSwitchedRecord((List<VorePathDef>) potentialPaths.Where(path => path.voreGoal == VoreGoal),
+                    originalRecord);
+
+                // TODO: Social memories?
+                // TODO: NOTE: For checking if accidental digestion can be reversed, use the "IncreaseDigestionProgress" RollAction
+            }
+            
+            IsAccidentallyDigesting = true;
+            Tracker.BeginCooldown();
+        }
 
         private void MakeSwitchedRecord(List<VorePathDef> potentialPaths, VoreTrackerRecord originalRecord)
         {
@@ -94,9 +128,9 @@ namespace RV2_Esegn_Additions
                 targetPath.stages.Find(stage => stage.jumpKey == JumpKey).index, true);
             
             AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
-                .Add(new Verse.WeakReference<VoreTrackerRecord>(originalRecord));
+                .Add(new WeakReference<VoreTrackerRecord>(originalRecord));
             AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
-                .Add(new Verse.WeakReference<VoreTrackerRecord>(newRecord));
+                .Add(new WeakReference<VoreTrackerRecord>(newRecord));
 
             // Switched records should always have the same index as their original, and vice-versa.
             SwitchedRecords.Add(newRecord);
@@ -148,29 +182,30 @@ namespace RV2_Esegn_Additions
         // vore validator to ignore capacity requirements for already-eaten prey.
         // TODO: Update cached potential paths when RV2 settings are updated
         // TODO: Also update when a predator consumes new prey that will enter this record, accounting for them
-        public List<VorePathDef> PotentialTargetPaths(List<Pawn> preythings)
+        private List<VorePathDef> PotentialTargetPaths(List<Pawn> preythings)
         {
             if (preythings == null) return new List<VorePathDef>();
             
             Patch_VorePathDef.DisablePathConflictChecks = true;
-            var ret = RV2_Common.VorePaths.FindAll(path =>
-                path.voreGoal.IsLethal 
-                && path.stages.Any(stage => stage.jumpKey == JumpKey)
-                && preythings.All(prey => path.IsValid(Predator, prey, out _, true, 
-                    RV2_EsegnAdditions_Settings.eadd.AccidentalDigestionIgnoresDesignations)
-                )
-            );
+            var ret = (List<VorePathDef>) RV2_Common.VorePaths
+                .FindAll(path => 
+                    path.voreGoal.IsLethal 
+                    && path.stages.Any(stage => stage.jumpKey == JumpKey)
+                    && preythings.All(prey => path.IsValid(Predator, prey, out _, true, 
+                        RV2_EsegnAdditions_Settings.eadd.AccidentalDigestionIgnoresDesignations)
+                    ))
+                .Where(path => VoreGoal == null || path.voreGoal == VoreGoal);
             Patch_VorePathDef.DisablePathConflictChecks = false;
             return ret;
         }
 
-        // Returns all prey currently in this record, and if path conflicts are enabled, any that may be placed in this
-        // record at some point in the future.
+        // Returns all prey currently in this AD record, and if path conflicts are enabled, any that may be placed in
+        // this AD record at some point in the future.
         // Only valid if accidental digestion is not already occurring.
         private List<Pawn> CurrentAndPotentialPrey()
         {
             // If path conflicts are disabled then we only care about the first record, if any. Returns null if there
-            // are no records.
+            // are no records. Without path conflicts only new AD records can gain VTRs to track.
             if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts)
                 return OriginalRecords.Empty() ? null : new List<Pawn> { OriginalRecords[0].Prey };
 
@@ -198,6 +233,7 @@ namespace RV2_Esegn_Additions
             {
                 UpdateModifierCache();
                 _potentialPaths = PotentialTargetPaths(CurrentAndPotentialPrey());
+                Tracker = AccidentalDigestionManager.Manager.GetTracker(Predator, false);
             }
         }
     }

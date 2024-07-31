@@ -2,19 +2,24 @@
 using RimVore2;
 using Verse;
 
+#if v1_4
+using static RV2_Esegn_Additions.Utilities.CompatibilityUtils;
+#endif
+
 namespace RV2_Esegn_Additions
 {
     public class AccidentalDigestionTracker : IExposable
     {
-        private List<AccidentalDigestionRecord> _records = new List<AccidentalDigestionRecord>();
+        public List<AccidentalDigestionRecord> Records = new List<AccidentalDigestionRecord>();
 
-        public bool IsEmpty => _records.Empty();
+        public bool IsEmpty => Records.Empty();
+        public uint Cooldown = 0;
         
         public void UpdateRecord(VoreTrackerRecord record)
         {
             if (record.VoreGoal.IsLethal) return;
 
-            var containingAdr = _records.Find(adr
+            var containingAdr = Records.Find(adr
                 => adr.OriginalRecords.Contains(record));
             var jumpKey = record.CurrentVoreStage.def.jumpKey;
 
@@ -28,7 +33,7 @@ namespace RV2_Esegn_Additions
             if (jumpKey == containingAdr.JumpKey) return;
             
             containingAdr.RemoveVoreTrackerRecord(record);
-            if (containingAdr.OriginalRecords.Empty()) _records.Remove(containingAdr);
+            if (containingAdr.OriginalRecords.Empty()) Records.Remove(containingAdr);
 
             if (jumpKey != null)
             {
@@ -36,11 +41,21 @@ namespace RV2_Esegn_Additions
             }
         }
 
+        public void BeginCooldown()
+        {
+            Cooldown = RV2_EsegnAdditions_Settings.eadd.AccidentalDigestionCooldown;
+        }
+
+        public void TickCooldown()
+        {
+            if (Cooldown > 0) Cooldown--;
+        }
+
         private void AddRecord(VoreTrackerRecord record, string jumpKey)
         {
             if (RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts)
             {
-                var targetAdr = _records.Find(adr
+                var targetAdr = Records.Find(adr
                     => adr.JumpKey == jumpKey);
                 if (targetAdr != null)
                 {
@@ -49,12 +64,13 @@ namespace RV2_Esegn_Additions
                 }
             }
                     
-            _records.Add(new AccidentalDigestionRecord(record));
+            Records.Add(new AccidentalDigestionRecord(record));
         }
 
         public void ExposeData()
         {
-            Scribe_Collections.Look(ref _records, nameof(_records), LookMode.Deep);
+            Scribe_Collections.Look(ref Records, nameof(Records), LookMode.Deep);
+            Scribe_Values.Look(ref Cooldown, nameof(Cooldown));
         }
     }
 }

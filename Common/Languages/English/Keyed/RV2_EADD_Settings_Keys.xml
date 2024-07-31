@@ -32,5 +32,11 @@
     <RV2_EADD_Settings_PredatorAwarenessChanceExample_Tip>The "warmup" phase of fatal digestion lasts for 24 ticks. This is the total chance a predator at the base awareness chance per tick will notice that they are accidentally digesting over that many ticks.</RV2_EADD_Settings_PredatorAwarenessChanceExample_Tip>
     <RV2_EADD_Settings_PreyMustStruggleToBeNoticed>Prey must struggle to be noticed</RV2_EADD_Settings_PreyMustStruggleToBeNoticed>
     <RV2_EADD_Settings_PreyMustStruggleToBeNoticed_Tip>If enabled, a predator can only notice they are accidentally digesting their prey if the prey is struggling. Ignored if struggling is disabled as a mechanic. If prey is unable to struggle, the predator will never notice that they are accidentally digesting them!</RV2_EADD_Settings_PreyMustStruggleToBeNoticed_Tip>
+    <RV2_EADD_Settings_CanAlwaysAccidentallyDigest>Accidental digestion always possible</RV2_EADD_Settings_CanAlwaysAccidentallyDigest>
+    <RV2_EADD_Settings_CanAlwaysAccidentallyDigest_Tip>Ordinarily, accidental digestion can only start if a predator is sleeping or has reduced consciousness. If this setting is enabled, it can happen at any time.</RV2_EADD_Settings_CanAlwaysAccidentallyDigest_Tip>
+    <RV2_EADD_Settings_LongTermPreventsAccidentalDigestion>Long-term stages prevent accidental digestion</RV2_EADD_Settings_LongTermPreventsAccidentalDigestion>
+    <RV2_EADD_Settings_LongTermPreventsAccidentalDigestion_Tip>If enabled, accidental digestion cannot begin if it would affect prey that have a manual pass condition stage, i.e. the long-term store goal. Keeps belly pets and the like safe.</RV2_EADD_Settings_LongTermPreventsAccidentalDigestion_Tip>
+    <RV2_EADD_Settings_AccidentalDigestionCooldown>Accidental digestion cooldown</RV2_EADD_Settings_AccidentalDigestionCooldown>
+    <RV2_EADD_Settings_AccidentalDigestionCooldown_Tip>For any given predator, wait this many ticks after accidental digestion starts before it can happen again. For reference, 60000 ticks is one in-game day.</RV2_EADD_Settings_AccidentalDigestionCooldown_Tip>
 
 </LanguageData>
