@@ -42,6 +42,8 @@ namespace RV2_Esegn_Additions.Utilities
             return false;
         }
         
+        // TODO: Option to skip the conflicting path if it is accidental digestion
+        // TODO: Don't forget about checking designations, if necessary!
         // outRecord is the record that conflicts, it's null if there isn't one
         public static bool PathConflictsWithAnyActiveVore(Pawn predator, VorePathDef path, out VoreTrackerRecord 
             outRecord)
@@ -86,6 +88,8 @@ namespace RV2_Esegn_Additions.Utilities
             }
         }
 
+        // TODO: Function which checks if a path conflicts because of accidental digestion
+        
         private static void ResolvePathConflict(VoreTrackerRecord record, VoreTrackerRecord conflictingRecord)
         {
             var currentJumpKey = record.CurrentVoreStage.def.jumpKey;

@@ -28,6 +28,7 @@ namespace RV2_Esegn_Additions
         [HarmonyPostfix]
         public static void Patch_MovePreyToNextStage(VoreTrackerRecord __instance)
         {
+            // TODO: Check for accidental digestion when resolving path conflicts
             if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
             ConflictingPathUtils.CheckAndResolvePathConflicts(__instance);
         }

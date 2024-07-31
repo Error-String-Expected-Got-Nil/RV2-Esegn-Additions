@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using RimVore2;
 using Verse;
@@ -16,6 +15,7 @@ namespace RV2_Esegn_Additions
 
         private float _predatorAwarenessModifier = 1f;
         private float _predatorControlModifier = 1f;
+        private List<VorePathDef> _potentialPaths = new List<VorePathDef>();
 
         public bool IsAccidentallyDigesting { get; private set; } = false;
 
@@ -25,6 +25,7 @@ namespace RV2_Esegn_Additions
             Predator = initial.Predator;
             JumpKey = initial.CurrentVoreStage.def.jumpKey;
             UpdateModifierCache();
+            _potentialPaths = PotentialTargetPaths();
             AddVoreTrackerRecord(initial);
         }
 
@@ -145,6 +146,7 @@ namespace RV2_Esegn_Additions
         
         // Temporarily disable path conflicts so we can find paths we can jump to. Also utilizes a minor patch to the
         // vore validator to ignore capacity requirements for already-eaten prey.
+        // TODO: Update cached potential paths when RV2 settings are updated
         public List<VorePathDef> PotentialTargetPaths()
         {
             Patch_VorePathDef.DisablePathConflictChecks = true;
@@ -166,9 +168,12 @@ namespace RV2_Esegn_Additions
             
             Scribe_References.Look(ref Predator, nameof(Predator), true);
             Scribe_Values.Look(ref JumpKey, nameof(JumpKey));
-            
-            Scribe_Values.Look(ref _predatorAwarenessModifier, nameof(_predatorAwarenessModifier));
-            Scribe_Values.Look(ref _predatorControlModifier, nameof(_predatorControlModifier));
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit) 
+            {
+                UpdateModifierCache();
+                _potentialPaths = PotentialTargetPaths();
+            }
         }
     }
 }
