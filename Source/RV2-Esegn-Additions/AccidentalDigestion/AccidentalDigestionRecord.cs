@@ -25,7 +25,7 @@ namespace RV2_Esegn_Additions
             Predator = initial.Predator;
             JumpKey = initial.CurrentVoreStage.def.jumpKey;
             UpdateModifierCache();
-            _potentialPaths = PotentialTargetPaths();
+            _potentialPaths = PotentialTargetPaths(CurrentAndPotentialPrey());
             AddVoreTrackerRecord(initial);
         }
 
@@ -147,18 +147,43 @@ namespace RV2_Esegn_Additions
         // Temporarily disable path conflicts so we can find paths we can jump to. Also utilizes a minor patch to the
         // vore validator to ignore capacity requirements for already-eaten prey.
         // TODO: Update cached potential paths when RV2 settings are updated
-        public List<VorePathDef> PotentialTargetPaths()
+        // TODO: Also update when a predator consumes new prey that will enter this record, accounting for them
+        public List<VorePathDef> PotentialTargetPaths(List<Pawn> preythings)
         {
+            if (preythings == null) return new List<VorePathDef>();
+            
             Patch_VorePathDef.DisablePathConflictChecks = true;
             var ret = RV2_Common.VorePaths.FindAll(path =>
                 path.voreGoal.IsLethal 
                 && path.stages.Any(stage => stage.jumpKey == JumpKey)
-                && OriginalRecords.All(record => record.VorePath.def.IsValid(Predator, record.Prey, out _, true, 
+                && preythings.All(prey => path.IsValid(Predator, prey, out _, true, 
                     RV2_EsegnAdditions_Settings.eadd.AccidentalDigestionIgnoresDesignations)
                 )
             );
             Patch_VorePathDef.DisablePathConflictChecks = false;
             return ret;
+        }
+
+        // Returns all prey currently in this record, and if path conflicts are enabled, any that may be placed in this
+        // record at some point in the future.
+        // Only valid if accidental digestion is not already occurring.
+        private List<Pawn> CurrentAndPotentialPrey()
+        {
+            // If path conflicts are disabled then we only care about the first record, if any. Returns null if there
+            // are no records.
+            if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts)
+                return OriginalRecords.Empty() ? null : new List<Pawn> { OriginalRecords[0].Prey };
+
+            // This is such a gangly LINQ query. I love it.
+            return (List<Pawn>) OriginalRecords
+                .Select(record => record.Prey)
+                .Concat(Predator.PawnData().VoreTracker.VoreTrackerRecords
+                    .Where(record => !OriginalRecords.Contains(record)
+                                     && record.VorePath.def.stages
+                                         .Where(stage => stage.index >= record.CurrentVoreStage.def.index)
+                                         .Any(stage => stage.jumpKey == JumpKey))
+                    .Select(record => record.Prey)
+                );
         }
         
         public void ExposeData()
@@ -172,7 +197,7 @@ namespace RV2_Esegn_Additions
             if (Scribe.mode == LoadSaveMode.PostLoadInit) 
             {
                 UpdateModifierCache();
-                _potentialPaths = PotentialTargetPaths();
+                _potentialPaths = PotentialTargetPaths(CurrentAndPotentialPrey());
             }
         }
     }
