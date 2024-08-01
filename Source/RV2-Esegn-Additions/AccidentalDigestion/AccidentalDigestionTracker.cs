@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RimVore2;
+using RimWorld;
 using Verse;
 
 #if v1_4
@@ -12,12 +14,106 @@ namespace RV2_Esegn_Additions
     {
         public List<AccidentalDigestionRecord> Records = new List<AccidentalDigestionRecord>();
 
+        public Pawn Predator;
         public bool IsEmpty => Records.Empty();
         public uint Cooldown = 0;
 
+        private float _predatorControlModifier;
+        private float _predatorAwarenessModifier;
+
+        public AccidentalDigestionTracker(Pawn predator)
+        {
+            Predator = predator;
+            UpdateModifierCache();
+        }
+
+        public void TickRare()
+        {
+            if (CanBeginAccidentalDigestion() && RollForAccidentalDigestion()) BeginAccidentalDigestion();
+        }
+        
+        public bool CanBeginAccidentalDigestion()
+        {
+            if (!RV2_EADD_Settings.eadd.EnableAccidentalDigestion) return false;
+            if (Cooldown > 0) return false;
+            if (Predator.PawnData().VoreTracker.VoreTrackerRecords.Empty()) return false;
+
+            if (RV2_EADD_Settings.eadd.CanAlwaysAccidentallyDigest) return true;
+            if (Predator.needs.rest.Resting) return true;
+            if (Predator.health.capacities.GetLevel(PawnCapacityDefOf.Consciousness) <= 0.9f) return true;
+
+            return false;
+        }
+        
+        public bool RollForAccidentalDigestion()
+        {
+            var chance = RV2_EADD_Settings.eadd.BaseAccidentalDigestionTickChance;
+            chance *= _predatorControlModifier;
+
+            return RandomUtility.GetRandomFloat() < chance;
+        }
+
+        // TODO: Account for when goal-switchers accidentally digest
+        // The way target selection works, a given "part" (jumpKey) having multiple prey will increase the likelihood
+        // it is selected for accidental digestion.
+        //
+        // If it turns out the chosen target doesn't have any possible fatal paths they can be jumped to, or the chosen
+        // group of targets if path conflicts are enabled, they will be removed from the potential targets and it will
+        // try to select a new target.
+        public void BeginAccidentalDigestion()
+        {
+            var potentialTargets = (List<VoreTrackerRecord>) Predator.PawnData().VoreTracker.VoreTrackerRecords
+                .Where(record => !record.VoreGoal.IsLethal && record.CurrentVoreStage.def.jumpKey != null);
+
+            do {
+                if (potentialTargets.Empty()) return;
+
+                var initialTarget = potentialTargets.RandomElement();
+                List<VoreTrackerRecord> tentativeTargets;
+                if (RV2_EADD_Settings.eadd.EnableVorePathConflicts)
+                    tentativeTargets = (List<VoreTrackerRecord>) potentialTargets.Where(record => 
+                        record.CurrentVoreStage.def.jumpKey == initialTarget.CurrentVoreStage.def.jumpKey);
+                else
+                    tentativeTargets = new List<VoreTrackerRecord> { initialTarget };
+                
+                // Notable edge case: If a prey is being swallowed and accidental digestion starts in the part they are
+                // travelling to, the accidental digestion won't have accounted for them. It will *try* to resolve the
+                // path conflict if possible, but it may give up and leave it conflicting if the new prey can't do it.
+                var potentialPaths = RV2_Common.VorePaths.FindAll(path =>
+                    path.voreGoal.IsLethal
+                    && path.stages.Any(stage => stage.jumpKey == initialTarget.CurrentVoreStage.def.jumpKey)
+                    && tentativeTargets
+                        .Select(record => record.Prey)
+                        .All(prey => path.IsValid(Predator, prey, out _, true,
+                            RV2_EADD_Settings.eadd.AccidentalDigestionIgnoresDesignations)));
+
+                if (!potentialPaths.Empty())
+                {
+                    Records.Add(new AccidentalDigestionRecord(tentativeTargets, potentialPaths, this, 
+                        initialTarget.CurrentVoreStage.def.jumpKey));
+                    return;
+                }
+
+                potentialTargets.RemoveAll(record => tentativeTargets.Contains(record));
+            } 
+            while (true);
+        }
+        
+        // TODO: Update cache when quirk menu is closed
+        public void UpdateModifierCache()
+        {
+            _predatorControlModifier = Predator.QuirkManager()?
+                .TryGetValueModifier("AccidentalDigestionControl",
+                    ModifierOperation.Multiply, out var predControlMod) == true ? predControlMod : 1f;
+            
+            _predatorAwarenessModifier = Predator.QuirkManager()?
+                .TryGetValueModifier("AccidentalDigestionAwareness",
+                    ModifierOperation.Multiply, out var predAwarenessMod) == true ? predAwarenessMod : 1f;
+        }
+        
         public void BeginCooldown()
         {
-            Cooldown = RV2_EsegnAdditions_Settings.eadd.AccidentalDigestionCooldown;
+            Cooldown = RV2_EADD_Settings.eadd.AccidentalDigestionCooldown;
         }
 
         public void TickCooldown()
@@ -28,7 +124,11 @@ namespace RV2_Esegn_Additions
         public void ExposeData()
         {
             Scribe_Collections.Look(ref Records, nameof(Records), LookMode.Deep);
+            Scribe_References.Look(ref Predator, nameof(Predator));
             Scribe_Values.Look(ref Cooldown, nameof(Cooldown));
+            
+            Scribe_Values.Look(ref _predatorControlModifier, nameof(_predatorControlModifier));
+            Scribe_Values.Look(ref _predatorAwarenessModifier, nameof(_predatorAwarenessModifier));
         }
     }
 }

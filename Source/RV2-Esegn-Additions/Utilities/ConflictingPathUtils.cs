@@ -96,6 +96,14 @@ namespace RV2_Esegn_Additions.Utilities
             if (targetStage == null) return;
             
             var targetPath = conflictingRecord.VorePath.def;
+
+            Patch_VorePathDef.DisablePathConflictChecks = true;
+            var targetPathIsValid = targetPath.IsValid(record.Predator, record.Prey, out _, true,
+                RV2_EADD_Settings.eadd.PathConflictsIgnoreDesignations);
+            Patch_VorePathDef.DisablePathConflictChecks = false;
+            
+            if (!targetPathIsValid) return;
+            
             var jump = new VoreJump(targetPath, targetStage);
             Patch_JumpUtility.SkipNextPathJumpNotification = true;
             jump.Jump(record, true);

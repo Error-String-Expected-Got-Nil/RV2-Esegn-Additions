@@ -19,11 +19,11 @@ namespace RV2_Esegn_Additions
 
             if (DisablePathConflictChecks) return;
             
-            if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
+            if (!RV2_EADD_Settings.eadd.EnableVorePathConflicts) return;
             
             if (ConflictingPathUtils.PathConflictsWithAnyActiveVore(predator, __instance, out var conflictingRecord))
             {
-                if (!RV2_EsegnAdditions_Settings.eadd.PathConflictsIgnoreDesignations
+                if (!RV2_EADD_Settings.eadd.PathConflictsIgnoreDesignations
                     // If conflicts obey designations, prevent the path if it would cause a conflict that would resolve
                     // in a way that disobeys designations...
                     && (
@@ -46,9 +46,9 @@ namespace RV2_Esegn_Additions
                     return;
                 }
                 
-                if (!isForAuto && RV2_EsegnAdditions_Settings.eadd.AllowConflictingManualInteractions) return;
+                if (!isForAuto && RV2_EADD_Settings.eadd.AllowConflictingManualInteractions) return;
                 if (predator.QuirkManager()?.HasSpecialFlag("EnableGoalSwitching") == true
-                    && RV2_EsegnAdditions_Settings.eadd.AllowGoalSwitchersToProposeConflicting) return;
+                    && RV2_EADD_Settings.eadd.AllowGoalSwitchersToProposeConflicting) return;
                 
                 reason = "RV2_EADD_Text_PathInvalidConflicting".Translate();
                 __result = false;

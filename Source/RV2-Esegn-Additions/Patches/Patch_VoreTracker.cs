@@ -17,7 +17,8 @@ namespace RV2_Esegn_Additions
         [HarmonyPostfix]
         public static void Patch_TickRare(VoreTracker __instance)
         {
-            
+            AccidentalDigestionManager.Manager.GetTracker(__instance.pawn, 
+                RV2_EADD_Settings.eadd.EnableAccidentalDigestion)?.TickRare();
         }
     }
 }

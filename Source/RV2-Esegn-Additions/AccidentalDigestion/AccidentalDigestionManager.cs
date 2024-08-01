@@ -33,7 +33,7 @@ namespace RV2_Esegn_Additions
 
             if (!createIfNonexistent) return null;
             
-            tracker = new AccidentalDigestionTracker();
+            tracker = new AccidentalDigestionTracker(predator);
             _trackers.Add(predator.thingIDNumber, tracker);
             return tracker;
         }

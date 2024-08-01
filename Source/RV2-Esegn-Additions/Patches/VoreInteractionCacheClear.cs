@@ -22,7 +22,7 @@ namespace RV2_Esegn_Additions
         [HarmonyPostfix]
         public static void Patch_VoreTrackerRecordClearCache()
         {
-            if (RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) 
+            if (RV2_EADD_Settings.eadd.EnableVorePathConflicts) 
                 VoreInteractionManager.ClearCachedInteractions();
         }
     }
@@ -35,7 +35,7 @@ namespace RV2_Esegn_Additions
         [HarmonyPostfix]
         public static void Patch_VoreTrackerClearCache()
         {
-            if (RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) 
+            if (RV2_EADD_Settings.eadd.EnableVorePathConflicts) 
                 VoreInteractionManager.ClearCachedInteractions();
         }
     }

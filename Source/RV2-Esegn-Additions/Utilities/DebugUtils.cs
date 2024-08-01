@@ -44,7 +44,7 @@ namespace RV2_Esegn_Additions.Utilities
                 path.voreGoal.IsLethal && path.stages.Any(stage => stage.jumpKey == record.CurrentVoreStage.def.jumpKey)
                                        && predator.PawnData().VoreTracker.VoreTrackerRecords.All(r =>
                                            r.VorePath.def.IsValid(predator, r.Prey, out _, true,
-                                               RV2_EsegnAdditions_Settings.eadd.AccidentalDigestionIgnoresDesignations)
+                                               RV2_EADD_Settings.eadd.AccidentalDigestionIgnoresDesignations)
                                        ));
 
             if (paths.Count == 0)

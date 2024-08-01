@@ -40,16 +40,16 @@ namespace RV2_Esegn_Additions
 
         public bool CanBeginAccidentalDigestion()
         {
-            if (!RV2_EsegnAdditions_Settings.eadd.EnableAccidentalDigestion) return false;
+            if (!RV2_EADD_Settings.eadd.EnableAccidentalDigestion) return false;
             if (Tracker.Cooldown > 0) return false;
             if (_potentialPaths.Empty()) return false;
 
-            if (RV2_EsegnAdditions_Settings.eadd.LongTermPreventsAccidentalDigestion
+            if (RV2_EADD_Settings.eadd.LongTermPreventsAccidentalDigestion
                 && OriginalRecords.Any(record => record.CurrentVoreStage.def.passConditions
                     .Any(condition => condition is StagePassCondition_Manual)))
                 return false;
 
-            if (RV2_EsegnAdditions_Settings.eadd.CanAlwaysAccidentallyDigest) return true;
+            if (RV2_EADD_Settings.eadd.CanAlwaysAccidentallyDigest) return true;
             if (Predator.needs.rest.Resting) return true;
             if (Predator.health.capacities.GetLevel(PawnCapacityDefOf.Consciousness) <= 0.9f) return true;
 
@@ -58,7 +58,7 @@ namespace RV2_Esegn_Additions
 
         public bool RollForAccidentalDigestion()
         {
-            var chance = RV2_EsegnAdditions_Settings.eadd.BaseAccidentalDigestionTickChance;
+            var chance = RV2_EADD_Settings.eadd.BaseAccidentalDigestionTickChance;
             chance *= _predatorControlModifier;
 
             return RandomUtility.GetRandomFloat() < chance;
@@ -68,11 +68,11 @@ namespace RV2_Esegn_Additions
         {
             // If prey must struggle to make the predator aware and none are, this automatically fails.
             if (RV2Mod.Settings.features.StrugglingEnabled
-                && RV2_EsegnAdditions_Settings.eadd.PreyMustStruggleToBeNoticed
+                && RV2_EADD_Settings.eadd.PreyMustStruggleToBeNoticed
                 && !SwitchedRecords.Any(record => record.StruggleManager.ShouldStruggle))
                 return false;
             
-            var chance = RV2_EsegnAdditions_Settings.eadd.BasePredatorAwarenessChance;
+            var chance = RV2_EADD_Settings.eadd.BasePredatorAwarenessChance;
             chance *= _predatorAwarenessModifier;
 
             var highestStruggle = 0f;
@@ -146,7 +146,7 @@ namespace RV2_Esegn_Additions
                 newRecord.Predator, newRecord.Prey, rulePacks);
             Find.PlayLog.Add(interaction);
             
-            NotificationUtility.DoNotification(RV2_EsegnAdditions_Settings.eadd.AccidentalDigestionNotificationType,
+            NotificationUtility.DoNotification(RV2_EADD_Settings.eadd.AccidentalDigestionNotificationType,
                 "RV2_EADD_Text_AccidentalDigestionNotification".Translate(
                         newRecord.Predator.Named("PREDATOR"),
                         newRecord.Prey.Named("PREY"),
@@ -191,7 +191,7 @@ namespace RV2_Esegn_Additions
                     path.voreGoal.IsLethal 
                     && path.stages.Any(stage => stage.jumpKey == JumpKey)
                     && preythings.All(prey => path.IsValid(Predator, prey, out _, true, 
-                        RV2_EsegnAdditions_Settings.eadd.AccidentalDigestionIgnoresDesignations)
+                        RV2_EADD_Settings.eadd.AccidentalDigestionIgnoresDesignations)
                     ))
                 .Where(path => VoreGoal == null || path.voreGoal == VoreGoal);
             Patch_VorePathDef.DisablePathConflictChecks = false;
@@ -205,7 +205,7 @@ namespace RV2_Esegn_Additions
         {
             // If path conflicts are disabled then we only care about the first record, if any. Returns null if there
             // are no records. Without path conflicts only new AD records can gain VTRs to track.
-            if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts)
+            if (!RV2_EADD_Settings.eadd.EnableVorePathConflicts)
                 return OriginalRecords.Empty() ? null : new List<Pawn> { OriginalRecords[0].Prey };
 
             // This is such a gangly LINQ query. I love it.

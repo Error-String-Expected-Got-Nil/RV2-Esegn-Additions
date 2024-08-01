@@ -12,7 +12,7 @@ namespace RV2_Esegn_Additions
         public SettingsTab_EsegnAdditions(string label, Action clickedAction, Func<bool> selected) 
             : base(label, clickedAction, selected) {}
         
-        public override SettingsContainer AssociatedContainer => RV2_EsegnAdditions_Settings.eadd;
+        public override SettingsContainer AssociatedContainer => RV2_EADD_Settings.eadd;
         public SettingsContainer_EsegnAdditions EsegnAdditions 
             => (SettingsContainer_EsegnAdditions) AssociatedContainer;
 

@@ -11,16 +11,16 @@ namespace RV2_Esegn_Additions
         public RV2_CPI_Mod(ModContentPack content) : base(content)
         {
             mod = this;
-            GetSettings<RV2_EsegnAdditions_Settings>();
+            GetSettings<RV2_EADD_Settings>();
             WriteSettings();
         }
     }
 
-    public class RV2_EsegnAdditions_Settings : ModSettings
+    public class RV2_EADD_Settings : ModSettings
     {
         public static SettingsContainer_EsegnAdditions eadd;
 
-        public RV2_EsegnAdditions_Settings()
+        public RV2_EADD_Settings()
         {
             eadd = new SettingsContainer_EsegnAdditions();
         }
@@ -38,7 +38,7 @@ namespace RV2_Esegn_Additions
         [HarmonyPostfix]
         private static void AddCPISettings()
         {
-            RV2_EsegnAdditions_Settings.eadd.DefsLoaded();
+            RV2_EADD_Settings.eadd.DefsLoaded();
         }
     }
 
@@ -48,7 +48,7 @@ namespace RV2_Esegn_Additions
         [HarmonyPostfix]
         private static void AddCPISettings()
         {
-            RV2_EsegnAdditions_Settings.eadd.Reset();
+            RV2_EADD_Settings.eadd.Reset();
         }
     }
 
