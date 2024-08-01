@@ -27,6 +27,8 @@ namespace RV2_Esegn_Additions
         public bool AllowGoalSwitchersToProposeConflicting => allowGoalSwitchersToProposeConflicting.value;
         public bool PathConflictsIgnoreDesignations => pathConflictsIgnoreDesignations.value;
 
+        // Note: "EnableAccidentalDigestion" simply prevents accidental digestion from starting. Behind-the-scenes
+        // management of records and tracking still occurs, in case it gets turned on in the middle of play.
         public bool EnableAccidentalDigestion => enableAccidentalDigestion.value;
         public float BaseAccidentalDigestionTickChance => baseAccidentalDigestionTickChance.value / 100f;
         public bool AccidentalDigestionIgnoresDesignations => accidentalDigestionIgnoresDesignations.value;

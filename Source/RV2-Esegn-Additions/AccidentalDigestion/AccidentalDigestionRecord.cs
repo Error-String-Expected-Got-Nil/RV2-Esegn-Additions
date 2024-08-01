@@ -63,8 +63,7 @@ namespace RV2_Esegn_Additions
 
             return RandomUtility.GetRandomFloat() < chance;
         }
-
-        // Makes a roll to see if the predator should become aware they are accidentally digesting, returns true if yes.
+        
         public bool RollPredatorAwareness()
         {
             // If prey must struggle to make the predator aware and none are, this automatically fails.

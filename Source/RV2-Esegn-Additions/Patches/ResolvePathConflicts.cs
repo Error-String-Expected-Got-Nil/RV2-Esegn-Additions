@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using HarmonyLib;
 using RimVore2;
 using RV2_Esegn_Additions.Utilities;
 
@@ -29,6 +30,17 @@ namespace RV2_Esegn_Additions
         {
             // TODO: Check for accidental digestion when resolving path conflicts
             if (!RV2_EsegnAdditions_Settings.eadd.EnableVorePathConflicts) return;
+            
+            // If accidental digestion is enabled and there are any active accidental digestion records that this VTR
+            // would fall into, then we don't need to resolve path conflicts, it will get handled by the accidental
+            // digestion record updating patch.
+            if (AccidentalDigestionManager.Manager.GetTracker(__instance.Predator, false)?.Records
+                    .Any(record => 
+                        record.IsAccidentallyDigesting 
+                        && record.JumpKey == __instance.CurrentVoreStage.def.jumpKey) 
+                == true)
+                return;
+            
             ConflictingPathUtils.CheckAndResolvePathConflicts(__instance);
         }
 

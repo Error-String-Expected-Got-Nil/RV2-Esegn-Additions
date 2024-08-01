@@ -19,6 +19,9 @@ namespace RV2_Esegn_Additions
         {
             if (record.VoreGoal.IsLethal) return;
 
+            // Necessary in case a record had a path jump and wasn't being tracked by the time this was called.
+            if (!record.Predator.PawnData().VoreTracker.VoreTrackerRecords.Contains(record)) return;
+
             var containingAdr = Records.Find(adr
                 => adr.OriginalRecords.Contains(record));
             var jumpKey = record.CurrentVoreStage.def.jumpKey;

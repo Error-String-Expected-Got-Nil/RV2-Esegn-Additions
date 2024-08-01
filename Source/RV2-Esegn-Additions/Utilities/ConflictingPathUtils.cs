@@ -42,39 +42,15 @@ namespace RV2_Esegn_Additions.Utilities
             return false;
         }
         
+        // TODO: Refactor this to play nicer with accidental digestion. Return list of conflicting VTRs instead?
         // outRecord is the record that conflicts, it's null if there isn't one
         public static bool PathConflictsWithAnyActiveVore(Pawn predator, VorePathDef path, out VoreTrackerRecord 
-            outRecord, bool considerAccidentalDigestion = false, Pawn prey = null)
+            outRecord)
         {
             foreach (var record in predator.PawnData().VoreTracker.VoreTrackerRecords)
             {
-                var targetRecord = record;
-                
-                if (considerAccidentalDigestion)
-                {
-                    // Try to get the AccidentalDigestionRecord that has this VTR
-                    var adrecord = AccidentalDigestionManager.Manager
-                        .GetTracker(predator, false)?.Records
-                        .Find(adr =>
-                            adr.IsAccidentallyDigesting
-                            && !adr.PredatorIsAware
-                            && adr.SwitchedRecords.Contains(record));
-                    
-                    // If any do, and we're fine with the prey being fatal, then...
-                    if (adrecord != null 
-                        && !(!RV2_EsegnAdditions_Settings.eadd.AccidentalDigestionIgnoresDesignations 
-                             && prey.PawnData()?.Designations?.TryGetValue(RV2DesignationDefOf.fatal)?.IsEnabled() 
-                             == false))
-                    {
-                        // ...swap the record with its original for the check.
-                        // Effectively, for the purposes of path conflict checks, the predator thinks they are still
-                        // doing the original record.
-                        targetRecord = adrecord.OriginalRecords[adrecord.SwitchedRecords.IndexOf(record)];
-                    }
-                }
-                
-                if (!PathConflictsWithRecord(targetRecord, path)) continue;
-                outRecord = targetRecord;
+                if (!PathConflictsWithRecord(record, path)) continue;
+                outRecord = record;
                 return true;
             }
 
