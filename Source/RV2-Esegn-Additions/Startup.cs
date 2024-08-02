@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using HarmonyLib;
-using RimVore2;
 using Verse;
 
 namespace RV2_Esegn_Additions
@@ -11,7 +10,7 @@ namespace RV2_Esegn_Additions
         static Startup()
         {
             Harmony.DEBUG = false;
-            Harmony harmony = new Harmony("RV2_Esegn_Additions");
+            var harmony = new Harmony("RV2_Esegn_Additions");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
     }

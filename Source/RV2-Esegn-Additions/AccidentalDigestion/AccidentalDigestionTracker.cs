@@ -59,8 +59,7 @@ namespace RV2_Esegn_Additions
 
             return RandomUtility.GetRandomFloat() < chance;
         }
-
-        // TODO: Account for when goal-switchers accidentally digest
+        
         // The way target selection works, a given "part" (jumpKey) having multiple prey will increase the likelihood
         // it is selected for accidental digestion.
         //
@@ -115,7 +114,6 @@ namespace RV2_Esegn_Additions
             while (true);
         }
         
-        // TODO: Update cache when quirk menu is closed
         public void UpdateModifierCache()
         {
             PredatorControlModifier = Predator.QuirkManager()?

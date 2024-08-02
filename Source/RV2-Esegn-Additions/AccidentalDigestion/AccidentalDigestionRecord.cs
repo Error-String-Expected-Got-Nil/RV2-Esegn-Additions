@@ -12,7 +12,7 @@ namespace RV2_Esegn_Additions
 {
     public class AccidentalDigestionRecord : IExposable
     {
-        public List<RecordPair> Records;
+        public List<RecordPair> Records = new List<RecordPair>();
 
         public List<VoreTrackerRecord> OriginalRecords =>
             (List<VoreTrackerRecord>)Records.Select(record => record.Original); 
@@ -23,6 +23,7 @@ namespace RV2_Esegn_Additions
         public Pawn Predator;
         public string JumpKey;
         public VoreGoalDef VoreGoal;
+        public Hediff_AccidentalDigestion Hediff;
         
         public AccidentalDigestionRecord(List<VoreTrackerRecord> targets, List<VorePathDef> potentialPaths, 
             AccidentalDigestionTracker tracker, string jumpKey)
@@ -35,8 +36,11 @@ namespace RV2_Esegn_Additions
             var filteredPaths = (List<VorePathDef>)potentialPaths.Where(path => path.voreGoal == VoreGoal);
             
             targets.ForEach(record => MakeSwitchedRecord(record, filteredPaths));
-            
-            // TODO: Hediff to indicate accidental digestion is happening?
+
+            var hediff = Predator.health.AddHediff(RV2_EADD_Common.EaddHediffDefOf.RV2_EADD_AccidentalDigestionHediff,
+                Records[0].Switched.CurrentBodyPart);
+            Hediff = (Hediff_AccidentalDigestion)hediff;
+            Hediff.UpdateLabel();
         }
 
         public void TickRare()
@@ -46,6 +50,8 @@ namespace RV2_Esegn_Additions
                 ResolveAccidentalDigestion();
                 return;
             }
+
+            Hediff.UpdateLabel();
             
             // Makes checks for anything that would immediately tell the predator they've accidentally digested their
             // prey, mainly cases of digestion finishing for any accidentally digested prey.
@@ -95,6 +101,8 @@ namespace RV2_Esegn_Additions
         // or by reverting to the original endo paths.
         public void ResolveAccidentalDigestion(bool doNotification = true)
         {
+            Hediff.LinkedRecord = null;
+            
             if (SwitchedRecords.Any(IsDigesting))
             {
                 if (doNotification) NotificationUtility.DoNotification(NotificationType.MessageNeutral, 
@@ -130,6 +138,25 @@ namespace RV2_Esegn_Additions
 
             record.Original.CurrentVoreStage.PassedRareTicks = 0;
             tracker.TrackVore(record.Original);
+        }
+
+        // Attempts to add a new record into this accidental digestion record. If it is unable to, it will leave the
+        // given record as-is.
+        public void TryAddNewRecord(VoreTrackerRecord record)
+        {
+            Patch_VorePathDef.DisablePathConflictChecks = true;
+            var paths = (List<VorePathDef>)SwitchedRecords
+                .Select(switched => switched.VorePath.def)
+                .Where(path => path.IsValid(Predator, record.Prey, out _, true, 
+                    RV2_EADD_Settings.eadd.AccidentalDigestionIgnoresDesignations));
+            Patch_VorePathDef.DisablePathConflictChecks = false;
+
+            // No paths were valid, just allow the paths to conflict. User rules go before resolving conflicts.
+            if (paths.Empty()) return;
+            
+            MakeSwitchedRecord(record, paths);
+            
+            Hediff.UpdateLabel();
         }
 
         // TODO: Social memories?
@@ -198,14 +225,19 @@ namespace RV2_Esegn_Additions
         public void ExposeData()
         {
             Scribe_Collections.Look(ref Records, nameof(Records), LookMode.Deep);
+            if (Scribe.mode == LoadSaveMode.LoadingVars)
+                if (Records == null)
+                    Records = new List<RecordPair>();
             
             Scribe_References.Look(ref Predator, nameof(Predator));
             Scribe_Values.Look(ref JumpKey, nameof(JumpKey));
             Scribe_Defs.Look(ref VoreGoal, nameof(VoreGoal));
+            Scribe_References.Look(ref Hediff, nameof(Hediff));
             
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 Tracker = AccidentalDigestionManager.Manager.GetTracker(Predator);
+                Hediff.LinkedRecord = this;
             }
         }
     }

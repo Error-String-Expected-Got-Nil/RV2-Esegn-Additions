@@ -42,7 +42,6 @@ namespace RV2_Esegn_Additions.Utilities
             return false;
         }
         
-        // TODO: Refactor this to play nicer with accidental digestion. Return list of conflicting VTRs instead?
         // outRecord is the record that conflicts, it's null if there isn't one
         public static bool PathConflictsWithAnyActiveVore(Pawn predator, VorePathDef path, out VoreTrackerRecord 
             outRecord)

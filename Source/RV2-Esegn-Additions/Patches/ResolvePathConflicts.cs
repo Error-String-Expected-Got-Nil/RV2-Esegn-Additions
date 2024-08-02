@@ -22,14 +22,41 @@ namespace RV2_Esegn_Additions
             }
         }
 
+        [HarmonyPatch(nameof(VoreTrackerRecord.MovePreyToNextStage))]
+        [HarmonyPrefix]
+        public static void Prefix_MovePreyToNextStage(VoreTrackerRecord __instance)
+        {
+            if (!RV2_EADD_Settings.eadd.EnableVorePathConflicts || !RV2_EADD_Settings.eadd.EnableAccidentalDigestion)
+                return;
+
+            // Prevent path jump if there's an accidental digestion record for the next stage
+            if (AccidentalDigestionManager.Manager
+                    .GetTracker(__instance.Predator, false)?.Records
+                    .Find(record => record.JumpKey == __instance.NextVoreStage?.def.jumpKey) != null)
+                __instance.PathToJumpTo = null;
+        }
+        
         // Technically this doesn't run for the first stage, but there shouldn't be any jumpKeys in the first stage
         // of a path anyways, so it should be fine.
         [HarmonyPatch(nameof(VoreTrackerRecord.MovePreyToNextStage))]
         [HarmonyPostfix]
-        public static void Patch_MovePreyToNextStage(VoreTrackerRecord __instance)
+        public static void Postfix_MovePreyToNextStage(VoreTrackerRecord __instance)
         {
-            // TODO: Check for accidental digestion when resolving path conflicts
             if (!RV2_EADD_Settings.eadd.EnableVorePathConflicts) return;
+
+            if (RV2_EADD_Settings.eadd.EnableAccidentalDigestion)
+            {
+                var adrecord = AccidentalDigestionManager.Manager
+                    .GetTracker(__instance.Predator, false)?.Records
+                    .Find(record => record.JumpKey == __instance.CurrentVoreStage.def.jumpKey);
+
+                if (adrecord != null)
+                {
+                    adrecord.TryAddNewRecord(__instance);
+                    return;
+                }
+            }
+            
             ConflictingPathUtils.CheckAndResolvePathConflicts(__instance);
         }
 
@@ -37,14 +64,14 @@ namespace RV2_Esegn_Additions
         // JumpToOtherPath is private so can't use nameof()
         [HarmonyPatch("JumpToOtherPath")]
         [HarmonyPrefix]
-        public static void Patch_JumpToOtherPath_Prefix()
+        public static void Prefix_JumpToOtherPath()
         {
             VoreJumpFlag = true;
         }
         
         [HarmonyPatch("JumpToOtherPath")]
         [HarmonyPostfix]
-        public static void Patch_JumpToOtherPath_Postfix()
+        public static void Postfix_JumpToOtherPath()
         {
             VoreJumpFlag = false;
         }
