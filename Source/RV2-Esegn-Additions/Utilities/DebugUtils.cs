@@ -1,7 +1,6 @@
 ﻿#if v1_5
 using LudeonTK;
 #endif
-using System.Linq;
 using RimVore2;
 using Verse;
 using RimWorld;
@@ -26,55 +25,20 @@ namespace RV2_Esegn_Additions.Utilities
                                + "|IsInterrupted: " + record.IsInterrupted);
             }
         }
-        
-        // Assumes only one prey
-        [DebugAction("RV2-Esegn", "Print possible accidental digestion paths",
+
+        [DebugAction("RV2-Esegn", "Begin accidental digestion", 
             actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
-        public static void PrintPossibleAccidentalDigestionPaths(Pawn predator)
+        public static void BeginAccidentalDigestion(Pawn predator)
         {
-            if ((predator.PawnData()?.VoreTracker?.VoreTrackerRecords.Count ?? 0) == 0)
-            {
-                RV2Log.Message("Predator had no records to check");
-                return;
-            }
-            
-            var record = predator.PawnData().VoreTracker.VoreTrackerRecords[0];
-
-            var paths = RV2_Common.VorePaths.FindAll(path =>
-                path.voreGoal.IsLethal && path.stages.Any(stage => stage.jumpKey == record.CurrentVoreStage.def.jumpKey)
-                                       && predator.PawnData().VoreTracker.VoreTrackerRecords.All(r =>
-                                           r.VorePath.def.IsValid(predator, r.Prey, out _, true,
-                                               RV2_EADD_Settings.eadd.AccidentalDigestionIgnoresDesignations)
-                                       ));
-
-            if (paths.Count == 0)
-            {
-                RV2Log.Message("No possible paths");
-                return;
-            }
-            
-            foreach (var path in paths)
-            {
-                RV2Log.Message(path.defName);
-            }
+            AccidentalDigestionManager.Manager.GetTracker(predator, false)?.BeginAccidentalDigestion();
         }
 
-        [DebugAction("RV2-Esegn", "Add accidental digestion flags",
+        [DebugAction("RV2-Esegn", "Resolve accidental digestion", 
             actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
-        public static void AddAccidentalDigestionFlags(Pawn predator)
+        public static void ResolveAllAccidentalDigestion(Pawn predator)
         {
-            if ((predator.PawnData()?.VoreTracker?.VoreTrackerRecords.Count ?? 0) == 0)
-            {
-                RV2Log.Message("Predator had no records to flag");
-                return;
-            }
-
-            foreach (var record in predator.PawnData().VoreTracker.VoreTrackerRecords)
-            {
-                AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
-                    .Add(new WeakReference<VoreTrackerRecord>(record));
-                RV2Log.Message("Added accidental digestion flag for record " + record.loadID);
-            }
+            AccidentalDigestionManager.Manager.GetTracker(predator, false)?.Records
+                .ForEach(record => record.ResolveAccidentalDigestion());
         }
     }
 }
