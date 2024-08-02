@@ -21,14 +21,14 @@ namespace RV2_Esegn_Additions
         private BoolSmartSetting canAlwaysAccidentallyDigest;
         private BoolSmartSetting longTermPreventsAccidentalDigestion;
         private FloatSmartSetting accidentalDigestionCooldown;
+        private BoolSmartSetting allowAwarenessRolls;
+        private FloatSmartSetting abortDigestionThreshold;
 
         public bool EnableVorePathConflicts => enableVorePathConflicts.value;
         public bool AllowConflictingManualInteractions => allowConflictingManualInteractions.value;
         public bool AllowGoalSwitchersToProposeConflicting => allowGoalSwitchersToProposeConflicting.value;
         public bool PathConflictsIgnoreDesignations => pathConflictsIgnoreDesignations.value;
-
-        // Note: "EnableAccidentalDigestion" simply prevents accidental digestion from starting. Behind-the-scenes
-        // management of records and tracking still occurs, in case it gets turned on in the middle of play.
+        
         public bool EnableAccidentalDigestion => enableAccidentalDigestion.value;
         public float BaseAccidentalDigestionTickChance => baseAccidentalDigestionTickChance.value / 100f;
         public bool AccidentalDigestionIgnoresDesignations => accidentalDigestionIgnoresDesignations.value;
@@ -38,6 +38,8 @@ namespace RV2_Esegn_Additions
         public bool CanAlwaysAccidentallyDigest => canAlwaysAccidentallyDigest.value;
         public bool LongTermPreventsAccidentalDigestion => longTermPreventsAccidentalDigestion.value;
         public uint AccidentalDigestionCooldown => (uint) accidentalDigestionCooldown.value;
+        public bool AllowAwarenessRolls => allowAwarenessRolls.value;
+        public float AbortDigestionThreshold => abortDigestionThreshold.value / 100f;
 
         public override void Reset()
         {
@@ -55,6 +57,8 @@ namespace RV2_Esegn_Additions
             canAlwaysAccidentallyDigest = null;
             longTermPreventsAccidentalDigestion = null;
             accidentalDigestionCooldown = null;
+            allowAwarenessRolls = null;
+            abortDigestionThreshold = null;
             
             EnsureSmartSettingDefinition();
         }
@@ -118,6 +122,15 @@ namespace RV2_Esegn_Additions
                     "RV2_EADD_Settings_AccidentalDigestionCooldown",
                     30000, 30000, 0, 120000,
                     "RV2_EADD_Settings_AccidentalDigestionCooldown_Tip", "0");
+            if (allowAwarenessRolls == null || allowAwarenessRolls.IsInvalid())
+                allowAwarenessRolls = new BoolSmartSetting(
+                    "RV2_EADD_Settings_AllowAwarenessRolls", true, true,
+                    "RV2_EADD_Settings_AllowAwarenessRolls_Tip");
+            if (abortDigestionThreshold == null || abortDigestionThreshold.IsInvalid())
+                abortDigestionThreshold = new FloatSmartSetting(
+                    "RV2_EADD_Settings_AbortDigestionThreshold",
+                    0, 0, 0, 100,
+                    "RV2_EADD_Settings_AbortDigestionThreshold_Tip", "0.00", "%");
         }
         
         private bool heightStale = true;
@@ -164,6 +177,8 @@ namespace RV2_Esegn_Additions
             canAlwaysAccidentallyDigest.DoSetting(list);
             longTermPreventsAccidentalDigestion.DoSetting(list);
             accidentalDigestionCooldown.DoSetting(list);
+            allowAwarenessRolls.DoSetting(list);
+            abortDigestionThreshold.DoSetting(list);
 
             list.EndScrollView(ref height, ref heightStale);
         }
@@ -182,20 +197,22 @@ namespace RV2_Esegn_Additions
                 EnsureSmartSettingDefinition();
             }
 
-            Scribe_Deep.Look(ref enableVorePathConflicts, "EnableVorePathConflicts");
-            Scribe_Deep.Look(ref allowConflictingManualInteractions, "AllowConflictingManualInteractions");
-            Scribe_Deep.Look(ref allowGoalSwitchersToProposeConflicting, "AllowGoalSwitchersToProposeConflicting");
-            Scribe_Deep.Look(ref pathConflictsIgnoreDesignations, "PathConflictsIgnoreDesignations");
+            Scribe_Deep.Look(ref enableVorePathConflicts, nameof(enableVorePathConflicts));
+            Scribe_Deep.Look(ref allowConflictingManualInteractions, nameof(allowConflictingManualInteractions));
+            Scribe_Deep.Look(ref allowGoalSwitchersToProposeConflicting, nameof(allowGoalSwitchersToProposeConflicting));
+            Scribe_Deep.Look(ref pathConflictsIgnoreDesignations, nameof(pathConflictsIgnoreDesignations));
 
-            Scribe_Deep.Look(ref enableAccidentalDigestion, "EnableAccidentalDigestion");
-            Scribe_Deep.Look(ref baseAccidentalDigestionTickChance, "BaseAccidentalDigestionTickChance");
-            Scribe_Deep.Look(ref accidentalDigestionIgnoresDesignations, "AccidentalDigestionIgnoresDesignations");
-            Scribe_Deep.Look(ref accidentalDigestionNotificationType, "AccidentalDigestionNotificationType");
-            Scribe_Deep.Look(ref basePredatorAwarenessChance, "BasePredatorAwarenessChance");
-            Scribe_Deep.Look(ref preyMustStruggleToBeNoticed, "PreyMustStruggleToBeNoticed");
-            Scribe_Deep.Look(ref canAlwaysAccidentallyDigest, "CanAlwaysAccidentallyDigest");
-            Scribe_Deep.Look(ref longTermPreventsAccidentalDigestion, "LongTermPreventsAccidentalDigestion");
-            Scribe_Deep.Look(ref accidentalDigestionCooldown, "AccidentalDigestionCooldown");
+            Scribe_Deep.Look(ref enableAccidentalDigestion, nameof(enableAccidentalDigestion));
+            Scribe_Deep.Look(ref baseAccidentalDigestionTickChance, nameof(baseAccidentalDigestionTickChance));
+            Scribe_Deep.Look(ref accidentalDigestionIgnoresDesignations, nameof(accidentalDigestionIgnoresDesignations));
+            Scribe_Deep.Look(ref accidentalDigestionNotificationType, nameof(accidentalDigestionNotificationType));
+            Scribe_Deep.Look(ref basePredatorAwarenessChance, nameof(basePredatorAwarenessChance));
+            Scribe_Deep.Look(ref preyMustStruggleToBeNoticed, nameof(preyMustStruggleToBeNoticed));
+            Scribe_Deep.Look(ref canAlwaysAccidentallyDigest, nameof(canAlwaysAccidentallyDigest));
+            Scribe_Deep.Look(ref longTermPreventsAccidentalDigestion, nameof(longTermPreventsAccidentalDigestion));
+            Scribe_Deep.Look(ref accidentalDigestionCooldown, nameof(accidentalDigestionCooldown));
+            Scribe_Deep.Look(ref allowAwarenessRolls, nameof(allowAwarenessRolls));
+            Scribe_Deep.Look(ref abortDigestionThreshold, nameof(abortDigestionThreshold));
             
             PostExposeData();
         }

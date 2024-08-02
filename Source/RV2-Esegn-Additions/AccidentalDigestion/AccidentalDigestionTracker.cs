@@ -16,10 +16,10 @@ namespace RV2_Esegn_Additions
 
         public Pawn Predator;
         public bool IsEmpty => Records.Empty();
-        public uint Cooldown = 0;
+        public uint Cooldown;
 
-        private float _predatorControlModifier;
-        private float _predatorAwarenessModifier;
+        public float PredatorControlModifier;
+        public float PredatorAwarenessModifier;
 
         public AccidentalDigestionTracker(Pawn predator)
         {
@@ -29,26 +29,33 @@ namespace RV2_Esegn_Additions
 
         public void TickRare()
         {
+            Records.ForEach(record => record.TickRare());
+            
             if (CanBeginAccidentalDigestion() && RollForAccidentalDigestion()) BeginAccidentalDigestion();
         }
+
+        public void NotifyFinished(AccidentalDigestionRecord record)
+        {
+            Records.Remove(record);
+        }
         
-        public bool CanBeginAccidentalDigestion()
+        private bool CanBeginAccidentalDigestion()
         {
             if (!RV2_EADD_Settings.eadd.EnableAccidentalDigestion) return false;
             if (Cooldown > 0) return false;
             if (Predator.PawnData().VoreTracker.VoreTrackerRecords.Empty()) return false;
 
             if (RV2_EADD_Settings.eadd.CanAlwaysAccidentallyDigest) return true;
-            if (Predator.needs.rest.Resting) return true;
+            if (!Predator.Awake()) return true;
             if (Predator.health.capacities.GetLevel(PawnCapacityDefOf.Consciousness) <= 0.9f) return true;
 
             return false;
         }
         
-        public bool RollForAccidentalDigestion()
+        private bool RollForAccidentalDigestion()
         {
             var chance = RV2_EADD_Settings.eadd.BaseAccidentalDigestionTickChance;
-            chance *= _predatorControlModifier;
+            chance *= PredatorControlModifier;
 
             return RandomUtility.GetRandomFloat() < chance;
         }
@@ -75,6 +82,14 @@ namespace RV2_Esegn_Additions
                         record.CurrentVoreStage.def.jumpKey == initialTarget.CurrentVoreStage.def.jumpKey);
                 else
                     tentativeTargets = new List<VoreTrackerRecord> { initialTarget };
+
+                if (RV2_EADD_Settings.eadd.LongTermPreventsAccidentalDigestion
+                    && tentativeTargets.Any(record => record.CurrentVoreStage.def.passConditions
+                        .Any(condition => condition is StagePassCondition_Manual)))
+                {
+                    potentialTargets.RemoveAll(record => tentativeTargets.Contains(record));
+                    continue;
+                }
                 
                 // Notable edge case: If a prey is being swallowed and accidental digestion starts in the part they are
                 // travelling to, the accidental digestion won't have accounted for them. It will *try* to resolve the
@@ -91,6 +106,7 @@ namespace RV2_Esegn_Additions
                 {
                     Records.Add(new AccidentalDigestionRecord(tentativeTargets, potentialPaths, this, 
                         initialTarget.CurrentVoreStage.def.jumpKey));
+                    BeginCooldown();
                     return;
                 }
 
@@ -102,11 +118,11 @@ namespace RV2_Esegn_Additions
         // TODO: Update cache when quirk menu is closed
         public void UpdateModifierCache()
         {
-            _predatorControlModifier = Predator.QuirkManager()?
+            PredatorControlModifier = Predator.QuirkManager()?
                 .TryGetValueModifier("AccidentalDigestionControl",
                     ModifierOperation.Multiply, out var predControlMod) == true ? predControlMod : 1f;
             
-            _predatorAwarenessModifier = Predator.QuirkManager()?
+            PredatorAwarenessModifier = Predator.QuirkManager()?
                 .TryGetValueModifier("AccidentalDigestionAwareness",
                     ModifierOperation.Multiply, out var predAwarenessMod) == true ? predAwarenessMod : 1f;
         }
@@ -126,9 +142,11 @@ namespace RV2_Esegn_Additions
             Scribe_Collections.Look(ref Records, nameof(Records), LookMode.Deep);
             Scribe_References.Look(ref Predator, nameof(Predator));
             Scribe_Values.Look(ref Cooldown, nameof(Cooldown));
-            
-            Scribe_Values.Look(ref _predatorControlModifier, nameof(_predatorControlModifier));
-            Scribe_Values.Look(ref _predatorAwarenessModifier, nameof(_predatorAwarenessModifier));
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                UpdateModifierCache();
+            }
         }
     }
 }

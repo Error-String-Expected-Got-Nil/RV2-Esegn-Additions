@@ -10,4 +10,9 @@
     <RV2_EADD_Text_AccidentalDigestionNotification_Key>Accidental digestion</RV2_EADD_Text_AccidentalDigestionNotification_Key>
     <RV2_EADD_Text_AccidentalDigestionNotification>{PREDATOR} has accidentally switched to fatal goal {GOAL} for their prey {PREY}!</RV2_EADD_Text_AccidentalDigestionNotification>
 
+    <RV2_EADD_Text_AccidentalDigestionAbort_Key>Accidental digestion abort</RV2_EADD_Text_AccidentalDigestionAbort_Key>
+    <RV2_EADD_Text_AccidentalDigestionAbort>{PREDATOR} realized they were accidentally digesting their prey, and has switched back to endo.</RV2_EADD_Text_AccidentalDigestionAbort>
+    <RV2_EADD_Text_AccidentalDigestionAbortFail_Key>Accidental digestion abort fail</RV2_EADD_Text_AccidentalDigestionAbortFail_Key>
+    <RV2_EADD_Text_AccidentalDigestionAbortFail>{PREDATOR} realized they were accidentally digesting their prey, but could not switch back to endo because digestion has already progressed too far.</RV2_EADD_Text_AccidentalDigestionAbortFail>
+
 </LanguageData>
