@@ -4,6 +4,10 @@ using RimVore2;
 using RimWorld;
 using Verse;
 
+#if v1_4
+using static RV2_Esegn_Additions.Utilities.CompatibilityUtils;
+#endif
+
 namespace RV2_Esegn_Additions
 {
     public class AccidentalDigestionRecord : IExposable
@@ -37,10 +41,19 @@ namespace RV2_Esegn_Additions
 
         public void TickRare()
         {
+            if (!RV2_EADD_Settings.eadd.EnableAccidentalDigestion)
+            {
+                ResolveAccidentalDigestion();
+                return;
+            }
+            
             // Makes checks for anything that would immediately tell the predator they've accidentally digested their
             // prey, mainly cases of digestion finishing for any accidentally digested prey.
-            if (Predator.Awake() && SwitchedRecords.Any(CannotRevertRecord))
+            if (Predator.Awake() && SwitchedRecords.Any(CannotRevertRecord)) 
+            {
                 ResolveAccidentalDigestion();
+                return;
+            }
             
             if (CanRollAwareness() && RollAwareness()) 
             {

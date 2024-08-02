@@ -28,7 +28,7 @@ namespace RV2_Esegn_Additions
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Deep.Look(ref eadd, "RV2_EADD_SettingsContainer", new object[0]);
+            Scribe_Deep.Look(ref eadd, "RV2_EADD_SettingsContainer");
         }
     }
     
