@@ -1,6 +1,7 @@
 ﻿#if v1_5
 using LudeonTK;
 #endif
+using System.Linq;
 using RimVore2;
 using Verse;
 using RimWorld;
@@ -30,14 +31,16 @@ namespace RV2_Esegn_Additions.Utilities
             actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
         public static void BeginAccidentalDigestion(Pawn predator)
         {
-            AccidentalDigestionManager.Manager.GetTracker(predator, false)?.BeginAccidentalDigestion();
+            AccidentalDigestionManager.Manager.GetTracker(predator).BeginAccidentalDigestion();
         }
 
         [DebugAction("RV2-Esegn", "Resolve accidental digestion", 
             actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
         public static void ResolveAllAccidentalDigestion(Pawn predator)
         {
+            // .ToList() is to duplicate the Records in advance so there isn't an enumeration modification exception.
             AccidentalDigestionManager.Manager.GetTracker(predator, false)?.Records
+                .ToList()
                 .ForEach(record => record.ResolveAccidentalDigestion());
         }
     }

@@ -155,6 +155,7 @@
         <label>Neutral control</label>
         <description>[PAWN_label] has average control over [PAWN_possessive] digestive system and other organs.</description>
         <rarity>Common</rarity>
+        <hidden>true</hidden>
         <comps>
             <li Class="RimVore2.QuirkComp_ValueModifier">
                 <modifierName>AccidentalDigestionControl</modifierName>

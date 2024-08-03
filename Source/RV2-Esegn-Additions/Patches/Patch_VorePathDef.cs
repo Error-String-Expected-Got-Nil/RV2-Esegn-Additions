@@ -12,13 +12,11 @@ namespace RV2_Esegn_Additions
         
         [HarmonyPatch(nameof(VorePathDef.IsValid))]
         [HarmonyPostfix]
-        public static void Postfix_IsValid(Pawn predator, Pawn prey, out string reason, bool isForAuto, 
+        public static void Postfix_IsValid(Pawn predator, Pawn prey, ref string reason, bool isForAuto, 
             bool ignoreDesignations, bool ignoreRules, VorePathDef __instance, ref bool __result)
         {
-            reason = null;
-
+            if (__result == false) return;
             if (DisablePathConflictChecks) return;
-            
             if (!RV2_EADD_Settings.eadd.EnableVorePathConflicts) return;
             
             if (ConflictingPathUtils.PathConflictsWithAnyActiveVore(predator, __instance, out var conflictingRecord))

@@ -14,10 +14,8 @@ namespace RV2_Esegn_Additions
     {
         public List<RecordPair> Records = new List<RecordPair>();
 
-        public List<VoreTrackerRecord> OriginalRecords =>
-            (List<VoreTrackerRecord>)Records.Select(record => record.Original); 
-        public List<VoreTrackerRecord> SwitchedRecords =>
-            (List<VoreTrackerRecord>)Records.Select(record => record.Switched); 
+        public List<VoreTrackerRecord> OriginalRecords => Records.Select(record => record.Original).ToList(); 
+        public List<VoreTrackerRecord> SwitchedRecords => Records.Select(record => record.Switched).ToList(); 
         
         public AccidentalDigestionTracker Tracker;
         public Pawn Predator;
@@ -33,7 +31,7 @@ namespace RV2_Esegn_Additions
             JumpKey = jumpKey;
             VoreGoal = potentialPaths.Select(path => path.voreGoal).RandomElement();
 
-            var filteredPaths = (List<VorePathDef>)potentialPaths.Where(path => path.voreGoal == VoreGoal);
+            var filteredPaths = potentialPaths.Where(path => path.voreGoal == VoreGoal).ToList();
             
             targets.ForEach(record => MakeSwitchedRecord(record, filteredPaths));
 
@@ -145,10 +143,11 @@ namespace RV2_Esegn_Additions
         public void TryAddNewRecord(VoreTrackerRecord record)
         {
             Patch_VorePathDef.DisablePathConflictChecks = true;
-            var paths = (List<VorePathDef>)SwitchedRecords
+            var paths = SwitchedRecords
                 .Select(switched => switched.VorePath.def)
                 .Where(path => path.IsValid(Predator, record.Prey, out _, true, 
-                    RV2_EADD_Settings.eadd.AccidentalDigestionIgnoresDesignations));
+                    RV2_EADD_Settings.eadd.AccidentalDigestionIgnoresDesignations))
+                .ToList();
             Patch_VorePathDef.DisablePathConflictChecks = false;
 
             // No paths were valid, just allow the paths to conflict. User rules go before resolving conflicts.
@@ -176,7 +175,8 @@ namespace RV2_Esegn_Additions
             Patch_SettingsContainer_Rules.MakeNextShouldStruggleCheckForced = true;
             var newRecord = tracker.SplitOffNewVore(record, record.Prey,
                 new VorePath(targetPath),
-                targetPath.stages.Find(stage => stage.jumpKey == JumpKey).index, true);
+                targetPath.stages.IndexOf(targetPath.stages.Find(stage => stage.jumpKey == JumpKey)), 
+                true);
             
             AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
                 .Add(new WeakReference<VoreTrackerRecord>(record));

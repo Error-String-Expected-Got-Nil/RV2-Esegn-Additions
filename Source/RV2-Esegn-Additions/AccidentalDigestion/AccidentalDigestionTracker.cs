@@ -68,8 +68,9 @@ namespace RV2_Esegn_Additions
         // try to select a new target.
         public void BeginAccidentalDigestion()
         {
-            var potentialTargets = (List<VoreTrackerRecord>) Predator.PawnData().VoreTracker.VoreTrackerRecords
-                .Where(record => !record.VoreGoal.IsLethal && record.CurrentVoreStage.def.jumpKey != null);
+            var potentialTargets = Predator.PawnData().VoreTracker.VoreTrackerRecords
+                .Where(record => !record.VoreGoal.IsLethal && record.CurrentVoreStage.def.jumpKey != null)
+                .ToList();
 
             do {
                 if (potentialTargets.Empty()) return;
@@ -77,8 +78,9 @@ namespace RV2_Esegn_Additions
                 var initialTarget = potentialTargets.RandomElement();
                 List<VoreTrackerRecord> tentativeTargets;
                 if (RV2_EADD_Settings.eadd.EnableVorePathConflicts)
-                    tentativeTargets = (List<VoreTrackerRecord>) potentialTargets.Where(record => 
-                        record.CurrentVoreStage.def.jumpKey == initialTarget.CurrentVoreStage.def.jumpKey);
+                    tentativeTargets = potentialTargets.Where(record => 
+                        record.CurrentVoreStage.def.jumpKey == initialTarget.CurrentVoreStage.def.jumpKey)
+                        .ToList();
                 else
                     tentativeTargets = new List<VoreTrackerRecord> { initialTarget };
 
@@ -93,13 +95,17 @@ namespace RV2_Esegn_Additions
                 // Notable edge case: If a prey is being swallowed and accidental digestion starts in the part they are
                 // travelling to, the accidental digestion won't have accounted for them. It will *try* to resolve the
                 // path conflict if possible, but it may give up and leave it conflicting if the new prey can't do it.
-                var potentialPaths = RV2_Common.VorePaths.FindAll(path =>
-                    path.voreGoal.IsLethal
-                    && path.stages.Any(stage => stage.jumpKey == initialTarget.CurrentVoreStage.def.jumpKey)
-                    && tentativeTargets
-                        .Select(record => record.Prey)
-                        .All(prey => path.IsValid(Predator, prey, out _, true,
-                            RV2_EADD_Settings.eadd.AccidentalDigestionIgnoresDesignations)));
+                Patch_VorePathDef.DisablePathConflictChecks = true;
+                var potentialPaths = RV2_Common.VorePaths
+                    .Where(path => 
+                        path.voreGoal.IsLethal
+                        && path.stages.Any(stage => stage.jumpKey == initialTarget.CurrentVoreStage.def.jumpKey)
+                        && tentativeTargets
+                            .Select(record => record.Prey)
+                            .All(prey => path.IsValid(Predator, prey, out _, true,
+                                RV2_EADD_Settings.eadd.AccidentalDigestionIgnoresDesignations)))
+                    .ToList();
+                Patch_VorePathDef.DisablePathConflictChecks = false;
 
                 if (!potentialPaths.Empty())
                 {

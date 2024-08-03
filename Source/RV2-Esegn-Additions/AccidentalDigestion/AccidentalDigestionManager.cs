@@ -45,33 +45,40 @@ namespace RV2_Esegn_Additions
             if (Scribe.mode == LoadSaveMode.Saving)
             {
                 // Save only alive references, and save them as direct references. 
-                var temp = (List<VoreTrackerRecord>) RecordsWhereAccidentalDigestionOccurred
+                var temp = RecordsWhereAccidentalDigestionOccurred
                     .Where(weakRef => weakRef.IsAlive)
-                    .Select(weakRef => weakRef.Target);
+                    .Select(weakRef => weakRef.Target)
+                    .ToList();
                 Scribe_Collections.Look(ref temp, nameof(RecordsWhereAccidentalDigestionOccurred), 
                     LookMode.Reference);
 
                 // Save only trackers that are not empty, or have a remaining cooldown.
-                var temp2 = (Dictionary<int, AccidentalDigestionTracker>) _trackers
+                var temp2 = _trackers
                     .Where(tracker => 
-                        !tracker.Value.IsEmpty || tracker.Value.Cooldown > 0);
+                        !tracker.Value.IsEmpty 
+                        || tracker.Value.Cooldown > 0)
+                    .ToDictionary();
                 Scribe_Collections.Look(ref temp2, nameof(_trackers), LookMode.Value, 
                     LookMode.Deep);
             }
             else if (Scribe.mode == LoadSaveMode.LoadingVars)
             {
                 // Load as direct references...
-                var temp = new List<VoreTrackerRecord>();
+                List<VoreTrackerRecord> temp = null;
                 Scribe_Collections.Look(ref temp, nameof(RecordsWhereAccidentalDigestionOccurred), 
                     LookMode.Reference);
 
                 // ...then make them weak references when putting them into the actual list.
-                RecordsWhereAccidentalDigestionOccurred = (List<WeakReference<VoreTrackerRecord>>)
-                    temp.Select(vtr => new WeakReference<VoreTrackerRecord>(vtr));
-
-                if (_trackers == null) _trackers = new Dictionary<int, AccidentalDigestionTracker>();
+                RecordsWhereAccidentalDigestionOccurred = 
+                    temp?
+                        .Select(vtr => new WeakReference<VoreTrackerRecord>(vtr))
+                        .ToList() 
+                    ?? new List<WeakReference<VoreTrackerRecord>>();
+                // Null-coalescing here now because there was an error related to this in testing.
+                
                 Scribe_Collections.Look(ref _trackers, nameof(_trackers), LookMode.Value, 
                     LookMode.Deep);
+                if (_trackers == null) _trackers = new Dictionary<int, AccidentalDigestionTracker>();
             }
         }
     }

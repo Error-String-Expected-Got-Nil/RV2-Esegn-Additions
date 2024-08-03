@@ -4,11 +4,11 @@ using Verse;
 
 namespace RV2_Esegn_Additions
 {
-    public class RV2_CPI_Mod : Mod
+    public class RV2_Esegn_Additions_Mod : Mod
     {
-        public static RV2_CPI_Mod mod;
+        public static RV2_Esegn_Additions_Mod mod;
 
-        public RV2_CPI_Mod(ModContentPack content) : base(content)
+        public RV2_Esegn_Additions_Mod(ModContentPack content) : base(content)
         {
             mod = this;
             GetSettings<RV2_EADD_Settings>();
@@ -36,7 +36,7 @@ namespace RV2_Esegn_Additions
     public static class Patch_RV2Settings_DefsLoaded
     {
         [HarmonyPostfix]
-        private static void AddCPISettings()
+        private static void AddEADDSettings()
         {
             RV2_EADD_Settings.eadd.DefsLoaded();
         }
@@ -46,7 +46,7 @@ namespace RV2_Esegn_Additions
     public static class Patch_RV2Settings_Reset
     {
         [HarmonyPostfix]
-        private static void AddCPISettings()
+        private static void AddEADDSettings()
         {
             RV2_EADD_Settings.eadd.Reset();
         }
@@ -56,9 +56,9 @@ namespace RV2_Esegn_Additions
     public static class Patch_RV2Mod_WriteSettings
     {
         [HarmonyPostfix]
-        private static void AddCPISettings()
+        private static void AddEADDSettings()
         {
-            RV2_CPI_Mod.mod.WriteSettings();
+            RV2_Esegn_Additions_Mod.mod.WriteSettings();
         }
     }
 
@@ -66,7 +66,7 @@ namespace RV2_Esegn_Additions
     public static class Patch_Window_Settings
     {
         [HarmonyPostfix]
-        private static void AddCPISettings()
+        private static void AddEADDSettings()
         {
             Window_Settings.AddTab(new SettingsTab_EsegnAdditions("RV2_EADD_SettingsTab".Translate(), 
                 null, null));
