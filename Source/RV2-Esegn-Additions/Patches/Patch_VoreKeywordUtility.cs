@@ -20,5 +20,21 @@ namespace RV2_Esegn_Additions
                 .Contains(record))
                 __result.AddDistinct("AccidentalDigestionOccurred");
         }
+
+        // VoreKeywordUtility.PawnKeywords() is entirely used for determining quirk validity, for which we don't care
+        // about path conflicts, so we disable those while getting pawn keywords.
+        [HarmonyPatch(nameof(VoreKeywordUtility.PawnKeywords))]
+        [HarmonyPrefix]
+        public static void Prefix_PawnKeywords()
+        {
+            Patch_VorePathDef.DisablePathConflictChecks = true;
+        }
+        
+        [HarmonyPatch(nameof(VoreKeywordUtility.PawnKeywords))]
+        [HarmonyPostfix]
+        public static void Postfix_PawnKeywords()
+        {
+            Patch_VorePathDef.DisablePathConflictChecks = false;
+        }
     }
 }

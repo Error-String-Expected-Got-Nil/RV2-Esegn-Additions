@@ -2,6 +2,7 @@
 using System.Linq;
 using RimVore2;
 using RimWorld;
+using RV2_Esegn_Additions.Utilities;
 using Verse;
 
 #if v1_4
@@ -23,6 +24,9 @@ namespace RV2_Esegn_Additions
         public VoreGoalDef VoreGoal;
         public Hediff_AccidentalDigestion Hediff;
         
+        public AccidentalDigestionRecord() {}
+        
+        // TODO: Statistics records?
         public AccidentalDigestionRecord(List<VoreTrackerRecord> targets, List<VorePathDef> potentialPaths, 
             AccidentalDigestionTracker tracker, string jumpKey)
         {
@@ -38,6 +42,7 @@ namespace RV2_Esegn_Additions
             var hediff = Predator.health.AddHediff(RV2_EADD_Common.EaddHediffDefOf.RV2_EADD_AccidentalDigestionHediff,
                 Records[0].Switched.CurrentBodyPart);
             Hediff = (Hediff_AccidentalDigestion)hediff;
+            Hediff.LinkedRecord = this;
             Hediff.UpdateLabel();
         }
 
@@ -48,8 +53,6 @@ namespace RV2_Esegn_Additions
                 ResolveAccidentalDigestion();
                 return;
             }
-
-            Hediff.UpdateLabel();
             
             // Makes checks for anything that would immediately tell the predator they've accidentally digested their
             // prey, mainly cases of digestion finishing for any accidentally digested prey.
@@ -63,7 +66,10 @@ namespace RV2_Esegn_Additions
             {
                 if (!Predator.Awake()) RestUtility.WakeUp(Predator);
                 ResolveAccidentalDigestion();
+                return;
             }
+            
+            Hediff.UpdateLabel();
         }
 
         private bool CanRollAwareness()
@@ -133,8 +139,9 @@ namespace RV2_Esegn_Additions
 
             var tracker = record.Switched.VoreTracker;
             tracker.UntrackVore(record.Switched);
-
+            
             record.Original.CurrentVoreStage.PassedRareTicks = 0;
+            record.Original.VoreContainer.TryAddOrTransferPrey(record.Switched.Prey);
             tracker.TrackVore(record.Original);
         }
 
@@ -179,9 +186,9 @@ namespace RV2_Esegn_Additions
                 true);
             
             AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
-                .Add(new WeakReference<VoreTrackerRecord>(record));
+                .Add(new ExposableWeakReference<VoreTrackerRecord>(record));
             AccidentalDigestionManager.Manager.RecordsWhereAccidentalDigestionOccurred
-                .Add(new WeakReference<VoreTrackerRecord>(newRecord));
+                .Add(new ExposableWeakReference<VoreTrackerRecord>(newRecord));
             
             Records.Add(new RecordPair { Original = record, Switched = newRecord });
             

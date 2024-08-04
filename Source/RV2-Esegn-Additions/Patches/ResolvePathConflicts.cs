@@ -30,7 +30,7 @@ namespace RV2_Esegn_Additions
                 return;
 
             // Prevent path jump if there's an accidental digestion record for the next stage
-            if (AccidentalDigestionManager.Manager
+            if (__instance.PathToJumpTo != null && AccidentalDigestionManager.Manager
                     .GetTracker(__instance.Predator, false)?.Records
                     .Find(record => record.JumpKey == __instance.NextVoreStage?.def.jumpKey) != null)
                 __instance.PathToJumpTo = null;

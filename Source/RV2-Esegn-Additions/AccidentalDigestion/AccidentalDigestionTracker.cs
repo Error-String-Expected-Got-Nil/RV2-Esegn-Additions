@@ -21,6 +21,8 @@ namespace RV2_Esegn_Additions
         public float PredatorControlModifier;
         public float PredatorAwarenessModifier;
 
+        public AccidentalDigestionTracker() {}
+        
         public AccidentalDigestionTracker(Pawn predator)
         {
             Predator = predator;
@@ -29,7 +31,8 @@ namespace RV2_Esegn_Additions
 
         public void TickRare()
         {
-            Records.ForEach(record => record.TickRare());
+            // .ToList() to clone in case a record gets removed during its rare tick
+            Records.ToList().ForEach(record => record.TickRare());
             
             if (CanBeginAccidentalDigestion() && RollForAccidentalDigestion()) BeginAccidentalDigestion();
         }

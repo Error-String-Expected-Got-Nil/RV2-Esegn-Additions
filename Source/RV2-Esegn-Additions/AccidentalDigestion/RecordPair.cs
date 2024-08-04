@@ -10,7 +10,8 @@ namespace RV2_Esegn_Additions
         
         public void ExposeData()
         {
-            Scribe_References.Look(ref Original, nameof(Original));
+            // Original VTR is no longer being tracked so it won't be deep-saved, need to do it here instead.
+            Scribe_Deep.Look(ref Original, nameof(Original));
             Scribe_References.Look(ref Switched, nameof(Switched));
         }
     }
