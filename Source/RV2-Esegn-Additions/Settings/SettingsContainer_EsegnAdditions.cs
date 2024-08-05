@@ -168,16 +168,16 @@ namespace RV2_Esegn_Additions
                 "RV2_EADD_Settings_AccidentalDigestionChanceExample_Tip".Translate());
             accidentalDigestionIgnoresDesignations.DoSetting(list);
             accidentalDigestionNotificationType.DoSetting(list);
+            canAlwaysAccidentallyDigest.DoSetting(list);
+            longTermPreventsAccidentalDigestion.DoSetting(list);
+            accidentalDigestionCooldown.DoSetting(list);
+            preyMustStruggleToBeNoticed.DoSetting(list);
+            allowAwarenessRolls.DoSetting(list);
             basePredatorAwarenessChance.DoSetting(list);
             list.Label(
                 "RV2_EADD_Settings_PredatorAwarenessChanceExample".Translate(
                     ChanceInRolls(24, BasePredatorAwarenessChance)), -1,
                 "RV2_EADD_Settings_PredatorAwarenessChanceExample_Tip");
-            preyMustStruggleToBeNoticed.DoSetting(list);
-            canAlwaysAccidentallyDigest.DoSetting(list);
-            longTermPreventsAccidentalDigestion.DoSetting(list);
-            accidentalDigestionCooldown.DoSetting(list);
-            allowAwarenessRolls.DoSetting(list);
             abortDigestionThreshold.DoSetting(list);
 
             list.EndScrollView(ref height, ref heightStale);
