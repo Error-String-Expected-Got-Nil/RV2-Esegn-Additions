@@ -42,7 +42,7 @@ namespace RV2_Esegn_Additions
             Records.Remove(record);
         }
         
-        private bool CanBeginAccidentalDigestion()
+        public bool CanBeginAccidentalDigestion()
         {
             if (!RV2_EADD_Settings.eadd.EnableAccidentalDigestion) return false;
             if (Cooldown > 0) return false;
@@ -55,7 +55,7 @@ namespace RV2_Esegn_Additions
             return false;
         }
         
-        private bool RollForAccidentalDigestion()
+        public bool RollForAccidentalDigestion()
         {
             var chance = RV2_EADD_Settings.eadd.BaseAccidentalDigestionTickChance;
             chance *= PredatorControlModifier;

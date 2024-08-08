@@ -26,5 +26,17 @@ namespace RV2_Esegn_Additions
 
             public static HediffDef RV2_EADD_AccidentalDigestionHediff;
         }
+
+        [DefOf]
+        public static class EaddRecordDefOf
+        {
+            static EaddRecordDefOf()
+            {
+                DefOfHelper.EnsureInitializedInCtor(typeof(EaddRecordDefOf));
+            }
+
+            public static RecordDef RV2_EADD_AccidentalDigestion_Predator;
+            public static RecordDef RV2_EADD_AccidentalDigestion_Prey;
+        }
     }
 }

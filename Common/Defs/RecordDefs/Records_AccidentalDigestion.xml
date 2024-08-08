@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <RecordDef>
+        <defName>RV2_EADD_AccidentalDigestion_Predator</defName>
+        <label>Vore: Accidental Digestion</label>
+        <description>The number of times I have started accidentally digesting my prey.</description>
+        <type>Int</type>
+    </RecordDef>
+
+    <RecordDef>
+        <defName>RV2_EADD_AccidentalDigestion_Prey</defName>
+        <label>Vore: Accidentally Digested</label>
+        <description>The number of times a predator has started accidentally digesting me.</description>
+        <type>Int</type>
+    </RecordDef>
+</Defs>

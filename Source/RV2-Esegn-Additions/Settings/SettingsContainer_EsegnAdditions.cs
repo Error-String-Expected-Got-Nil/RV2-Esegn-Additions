@@ -88,7 +88,7 @@ namespace RV2_Esegn_Additions
             if (baseAccidentalDigestionTickChance == null || baseAccidentalDigestionTickChance.IsInvalid())
                 baseAccidentalDigestionTickChance = new FloatSmartSetting(
                     "RV2_EADD_Settings_BaseAccidentalDigestionTickChance", 
-                    0.46f, 0.46f, 0f, 100f, 
+                    1.50f, 1.50f, 0f, 100f, 
                     "RV2_EADD_Settings_BaseAccidentalDigestionTickChance_Tip", 
                     "0.00", "%");
             if (accidentalDigestionIgnoresDesignations == null || accidentalDigestionIgnoresDesignations.IsInvalid())
@@ -177,7 +177,7 @@ namespace RV2_Esegn_Additions
             list.Label(
                 "RV2_EADD_Settings_PredatorAwarenessChanceExample".Translate(
                     ChanceInRolls(24, BasePredatorAwarenessChance)), -1,
-                "RV2_EADD_Settings_PredatorAwarenessChanceExample_Tip");
+                "RV2_EADD_Settings_PredatorAwarenessChanceExample_Tip".Translate());
             abortDigestionThreshold.DoSetting(list);
 
             list.EndScrollView(ref height, ref heightStale);

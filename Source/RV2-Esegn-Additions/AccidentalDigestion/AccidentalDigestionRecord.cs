@@ -5,10 +5,6 @@ using RimWorld;
 using RV2_Esegn_Additions.Utilities;
 using Verse;
 
-#if v1_4
-using static RV2_Esegn_Additions.Utilities.CompatibilityUtils;
-#endif
-
 namespace RV2_Esegn_Additions
 {
     public class AccidentalDigestionRecord : IExposable
@@ -26,7 +22,6 @@ namespace RV2_Esegn_Additions
         
         public AccidentalDigestionRecord() {}
         
-        // TODO: Statistics records?
         public AccidentalDigestionRecord(List<VoreTrackerRecord> targets, List<VorePathDef> potentialPaths, 
             AccidentalDigestionTracker tracker, string jumpKey)
         {
@@ -72,19 +67,19 @@ namespace RV2_Esegn_Additions
             Hediff.UpdateLabel();
         }
 
-        private bool CanRollAwareness()
+        public bool CanRollAwareness()
         {
-            return RV2_EADD_Settings.eadd.AllowAwarenessRolls;
-        }
-        
-        private bool RollAwareness()
-        {
-            // If prey must struggle to make the predator aware and none are, this automatically fails.
+            if (!RV2_EADD_Settings.eadd.AllowAwarenessRolls) return false;
             if (RV2Mod.Settings.features.StrugglingEnabled
                 && RV2_EADD_Settings.eadd.PreyMustStruggleToBeNoticed
                 && !SwitchedRecords.Any(record => record.StruggleManager.ShouldStruggle))
                 return false;
             
+            return true;
+        }
+        
+        public bool RollAwareness()
+        {
             var chance = RV2_EADD_Settings.eadd.BasePredatorAwarenessChance;
             chance *= Tracker.PredatorAwarenessModifier;
 
@@ -191,6 +186,9 @@ namespace RV2_Esegn_Additions
                 .Add(new ExposableWeakReference<VoreTrackerRecord>(newRecord));
             
             Records.Add(new RecordPair { Original = record, Switched = newRecord });
+            
+            record.Predator.records.Increment(RV2_EADD_Common.EaddRecordDefOf.RV2_EADD_AccidentalDigestion_Predator);
+            record.Prey.records.Increment(RV2_EADD_Common.EaddRecordDefOf.RV2_EADD_AccidentalDigestion_Prey);
             
             var rulePacks = new List<RulePackDef>();
             var typeRules = newRecord.VorePath.VoreType?.relatedRulePacks;
