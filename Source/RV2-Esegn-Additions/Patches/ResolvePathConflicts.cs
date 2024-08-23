@@ -49,8 +49,8 @@ namespace RV2_Esegn_Additions
                 var adrecord = AccidentalDigestionManager.Manager
                     .GetTracker(__instance.Predator, false)?.Records
                     .Find(record => record.JumpKey == __instance.CurrentVoreStage.def.jumpKey);
-
-                if (adrecord != null)
+                
+                if (adrecord != null && !adrecord.SwitchedRecords.Contains(__instance))
                 {
                     adrecord.TryAddNewRecord(__instance);
                     return;
