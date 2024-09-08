@@ -42,13 +42,6 @@ namespace RV2_Esegn_Additions
         public override void ExposeData()
         {
             base.ExposeData();
-
-            // Only save references to records that are both alive and are being tracked anywhere.
-            ExposableWeakReference<VoreTrackerRecord>.ShouldSave = weakRef
-                => weakRef.IsAlive
-                   && GlobalVoreTrackerUtility.ActiveVoreTrackers
-                       .Any(tracker => tracker.VoreTrackerRecords
-                           .Contains(weakRef.Target));
             
             Scribe_Collections.Look(ref RecordsWhereAccidentalDigestionOccurred, 
                 nameof(RecordsWhereAccidentalDigestionOccurred), LookMode.Deep);
