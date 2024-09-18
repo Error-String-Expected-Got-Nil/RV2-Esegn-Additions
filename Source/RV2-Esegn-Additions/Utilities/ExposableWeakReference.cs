@@ -10,12 +10,11 @@ namespace RV2_Esegn_Additions.Utilities
 {
     public class ExposableWeakReference<T> : IExposable where T : class, ILoadReferenceable
     {
-        public static Predicate<Verse.WeakReference<T>> ShouldSave = weakRef => weakRef.IsAlive;
-        
         private Verse.WeakReference<T> _weakRef;
 
-        public T Target => _weakRef.Target;
-        public bool IsAlive => _weakRef.IsAlive;
+        // Now null-coalescing because whatIf encountered a very strange bug involving _weakRef somehow becoming null
+        public T Target => _weakRef?.Target;
+        public bool IsAlive => _weakRef?.IsAlive ?? false;
         
         public ExposableWeakReference() {}
         
@@ -26,10 +25,7 @@ namespace RV2_Esegn_Additions.Utilities
         
         public void ExposeData()
         {
-            if (Scribe.mode != LoadSaveMode.Saving || ShouldSave(_weakRef))
-            {
-                Scribe_References.Look(ref _weakRef, nameof(_weakRef));
-            }
+            Scribe_References.Look(ref _weakRef, nameof(_weakRef));
         }
     }
 }

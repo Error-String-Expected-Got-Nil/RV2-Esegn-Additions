@@ -42,6 +42,10 @@ namespace RV2_Esegn_Additions
         public override void ExposeData()
         {
             base.ExposeData();
+
+            // Remove all dead records before saving
+            if (Scribe.mode == LoadSaveMode.Saving)
+                RecordsWhereAccidentalDigestionOccurred.RemoveAll(weakRef => !weakRef.IsAlive);
             
             Scribe_Collections.Look(ref RecordsWhereAccidentalDigestionOccurred, 
                 nameof(RecordsWhereAccidentalDigestionOccurred), LookMode.Deep);
