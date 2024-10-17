@@ -7,9 +7,6 @@ using RimVore2;
 
 namespace RV2_Esegn_Additions
 {
-    // TODO: Test what happens if a jump occurs while accidental digestion is happening?
-    // The result: It breaks. Would be easiest to just disable manual path jumps while accidental digestion happens.
-    
     [HarmonyPatch]
     public class Patch_Patch_UI_RMB
     {
@@ -22,6 +19,7 @@ namespace RV2_Esegn_Additions
         private static readonly MethodInfo RecordIsFromAccidentalDigestionInfo = AccessTools.Method(
             typeof(Patch_Patch_UI_RMB), nameof(RecordIsFromAccidentalDigestion));
         
+        // The target class is internal and the target method is private, so we gotta do it like this
         [HarmonyTargetMethod]
         public static MethodBase Target()
         {
