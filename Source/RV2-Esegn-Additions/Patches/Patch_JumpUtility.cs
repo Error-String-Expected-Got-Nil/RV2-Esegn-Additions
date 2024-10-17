@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using HarmonyLib;
+﻿using HarmonyLib;
 using RimVore2;
+using Verse;
 
 namespace RV2_Esegn_Additions
 {
