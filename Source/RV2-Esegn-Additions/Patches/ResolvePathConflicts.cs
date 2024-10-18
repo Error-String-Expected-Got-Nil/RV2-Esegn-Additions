@@ -59,28 +59,10 @@ namespace RV2_Esegn_Additions
             
             ConflictingPathUtils.CheckAndResolvePathConflicts(__instance);
         }
-
-        public static bool VoreJumpFlag = false;
-        // JumpToOtherPath is private so can't use nameof()
-        [HarmonyPatch("JumpToOtherPath")]
-        [HarmonyPrefix]
-        public static void Prefix_JumpToOtherPath()
-        {
-            VoreJumpFlag = true;
-        }
-        
-        [HarmonyPatch("JumpToOtherPath")]
-        [HarmonyPostfix]
-        public static void Postfix_JumpToOtherPath()
-        {
-            VoreJumpFlag = false;
-        }
     }
 
     // When a record is split off, check for the flag that indicates a vore jump happened to create the split, and then
     // check other records on the predator for conflicts, using the jumped-to path as the primary.
-    // Only works for automatic jumps, but I don't think the manual jump feature even works? Might need to look into
-    // that.
     [HarmonyPatch(typeof(VoreTracker))]
     public class Patch_VoreTracker_ResolvePathConflicts
     {
@@ -88,12 +70,8 @@ namespace RV2_Esegn_Additions
         [HarmonyPostfix]
         public static void Patch_SplitOffNewVore(VoreTrackerRecord __result)
         {
-            if (!RV2_EADD_Settings.eadd.EnableVorePathConflicts) return;
-            if (Patch_VoreTrackerRecord_ResolvePathConflicts.VoreJumpFlag)
-            {
+            if (RV2_EADD_Settings.eadd.EnableVorePathConflicts && Patch_JumpUtility.VoreJumpFlag)
                 ConflictingPathUtils.CheckAndResolveOtherRecords(__result);
-                Patch_VoreTrackerRecord_ResolvePathConflicts.VoreJumpFlag = false;
-            }
         }
     }
 }
