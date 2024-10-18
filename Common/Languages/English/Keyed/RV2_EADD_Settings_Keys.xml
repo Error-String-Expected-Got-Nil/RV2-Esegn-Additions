@@ -43,4 +43,13 @@
     <RV2_EADD_Settings_AbortDigestionThreshold>Accidental digestion abort threshold</RV2_EADD_Settings_AbortDigestionThreshold>
     <RV2_EADD_Settings_AbortDigestionThreshold_Tip>If prey is being accidentally digested and digestion has actually started, consider it too late to stop digesting if digestion progress goes above this value. Mainly for cases where you'd prefer prey just get digested entirely, rather than be released half-melted, like if you have the Reformers submod.</RV2_EADD_Settings_AbortDigestionThreshold_Tip>
     
+    <RV2_EADD_Settings_ExtrasHeader>Extras</RV2_EADD_Settings_ExtrasHeader>
+
+    <RV2_EADD_Settings_EnableEndoanalepticsSupplements>Enable endoanaleptics supplements</RV2_EADD_Settings_EnableEndoanalepticsSupplements>
+    <RV2_EADD_Settings_EnableEndoanalepticsSupplements_Tip>Allows a doctor to use medicine on a pawn capable of healing vore to give them endoanaleptics supplements, which allows healing vore to tend wounds as if it were the adminstering doctor tending them.</RV2_EADD_Settings_EnableEndoanalepticsSupplements_Tip>
+    <RV2_EADD_Settings_HealWaitDefaultPlayer>Healing vore wait default (player)</RV2_EADD_Settings_HealWaitDefaultPlayer>
+    <RV2_EADD_Settings_HealWaitDefaultPlayer_Tip>Whether player-controlled pawns should, by default, wait for endoanaleptics supplements before tending the wounds of their prey. Can be manually overridden.</RV2_EADD_Settings_HealWaitDefaultPlayer_Tip>
+    <RV2_EADD_Settings_HealWaitDefaultOther>Healing vore wait default (other)</RV2_EADD_Settings_HealWaitDefaultOther>
+    <RV2_EADD_Settings_HealWaitDefaultOther_Tip>Whether non-player-controlled pawns should, by default, wait for endoanaleptics supplements before tending the wounds of their prey. Can only be manually overridden if the "show all designations" setting from the base mod is enabled.</RV2_EADD_Settings_HealWaitDefaultOther_Tip>
+
 </LanguageData>

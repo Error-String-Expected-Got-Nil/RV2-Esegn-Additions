@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using RimVore2;
+using RimWorld;
 using Verse;
 
 namespace RV2_Esegn_Additions
@@ -37,6 +38,17 @@ namespace RV2_Esegn_Additions
 
             public static RecordDef RV2_EADD_AccidentalDigestion_Predator;
             public static RecordDef RV2_EADD_AccidentalDigestion_Prey;
+        }
+
+        [DefOf]
+        public static class EaddDesignationDefOf
+        {
+            static EaddDesignationDefOf()
+            {
+                DefOfHelper.EnsureInitializedInCtor(typeof(EaddDesignationDefOf));
+            }
+
+            public static RV2DesignationDef heal_wait;
         }
     }
 }

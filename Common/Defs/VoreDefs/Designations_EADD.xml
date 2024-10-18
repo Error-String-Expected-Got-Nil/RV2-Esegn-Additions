@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <RimVore2.RV2DesignationDef>
+        <defName>heal_wait</defName>
+        <label>Endoanaleptics Wait</label>
+        <assignedTo>Predator</assignedTo>
+        <description>If using healing vore, this pawn will wait for endoanaleptics supplements before treating their prey</description>
+        <iconPathEnabledManually>Widget/heal_wait_manual_on</iconPathEnabledManually>
+        <iconPathDisabledManually>Widget/heal_wait_manual_off</iconPathDisabledManually>
+        <iconPathEnabledAutomatically>Widget/heal_wait_auto_on</iconPathEnabledAutomatically>
+        <iconPathDisabledAutomatically>Widget/heal_wait_auto_off</iconPathDisabledAutomatically>
+        <iconPathBlocked>Widget/heal_wait_auto_off</iconPathBlocked>
+        <tipEnabledManually>Currently allowed to treat prey even without endoanaleptics supplements.\nManually assigned by player</tipEnabledManually>
+        <tipDisabledManually>Currently not allowed to treat prey without endoanaleptics supplements.\nManually assigned by player</tipDisabledManually>
+        <tipEnabledAutomatically>Currently allowed to treat prey even without endoanaleptics supplements.\nAutomatically assigned by settings</tipEnabledAutomatically>
+        <tipDisabledAutomatically>Currently not allowed to treat prey without endoanaleptics supplements.\nAutomatically assigned by settings</tipDisabledAutomatically>
+        <tipBlocked>This tip should not appear, so hopefully you aren't seeing this.</tipBlocked>
+    </RimVore2.RV2DesignationDef>
+</Defs>

@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 using RimVore2;
+using RimWorld;
+using Verse;
 
 namespace RV2_Esegn_Additions
 {
@@ -16,6 +18,25 @@ namespace RV2_Esegn_Additions
             if (!MakeNextShouldStruggleCheckForced) return;
             isForced = true;
             MakeNextShouldStruggleCheckForced = false;
+        }
+        
+        [HarmonyPatch(nameof(SettingsContainer_Rules.DesignationActive))]
+        [HarmonyPrefix]
+        public static bool Patch_DesignationActive(Pawn pawn, RV2DesignationDef designation, ref bool __result)
+        {
+            if (designation == RV2_EADD_Common.EaddDesignationDefOf.heal_wait)
+            {
+                if (pawn.IsAnimal() && pawn.Faction == Faction.OfPlayer)
+                    __result = !RV2_EADD_Settings.eadd.HealWaitDefaultPlayer;
+                else if (pawn.IsColonistPlayerControlled || pawn.IsColonyMechPlayerControlled)
+                    __result = !RV2_EADD_Settings.eadd.HealWaitDefaultPlayer;
+                else
+                    __result = !RV2_EADD_Settings.eadd.HealWaitDefaultOther;
+                
+                return false;
+            }
+            
+            return true;
         }
     }
 }

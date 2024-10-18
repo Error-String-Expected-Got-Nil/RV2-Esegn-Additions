@@ -24,6 +24,10 @@ namespace RV2_Esegn_Additions
         private BoolSmartSetting allowAwarenessRolls;
         private FloatSmartSetting abortDigestionThreshold;
 
+        private BoolSmartSetting enableEndoanalepticsSupplements;
+        private BoolSmartSetting healWaitDefaultPlayer;
+        private BoolSmartSetting healWaitDefaultOther;
+
         public bool EnableVorePathConflicts => enableVorePathConflicts.value;
         public bool AllowConflictingManualInteractions => allowConflictingManualInteractions.value;
         public bool AllowGoalSwitchersToProposeConflicting => allowGoalSwitchersToProposeConflicting.value;
@@ -40,6 +44,10 @@ namespace RV2_Esegn_Additions
         public uint AccidentalDigestionCooldown => (uint) accidentalDigestionCooldown.value;
         public bool AllowAwarenessRolls => allowAwarenessRolls.value;
         public float AbortDigestionThreshold => abortDigestionThreshold.value / 100f;
+
+        public bool EnableEndoanalepticsSupplements => enableEndoanalepticsSupplements.value;
+        public bool HealWaitDefaultPlayer => healWaitDefaultPlayer.value;
+        public bool HealWaitDefaultOther => healWaitDefaultOther.value;
 
         public override void Reset()
         {
@@ -59,6 +67,10 @@ namespace RV2_Esegn_Additions
             accidentalDigestionCooldown = null;
             allowAwarenessRolls = null;
             abortDigestionThreshold = null;
+
+            enableEndoanalepticsSupplements = null;
+            healWaitDefaultPlayer = null;
+            healWaitDefaultOther = null;
             
             EnsureSmartSettingDefinition();
         }
@@ -131,6 +143,20 @@ namespace RV2_Esegn_Additions
                     "RV2_EADD_Settings_AbortDigestionThreshold",
                     0, 0, 0, 100,
                     "RV2_EADD_Settings_AbortDigestionThreshold_Tip", "0.00", "%");
+
+            if (enableEndoanalepticsSupplements == null || enableEndoanalepticsSupplements.IsInvalid())
+                enableEndoanalepticsSupplements = new BoolSmartSetting(
+                    "RV2_EADD_Settings_EnableEndoanalepticsSupplements", true, true,
+                    "RV2_EADD_Settings_EnableEndoanalepticsSupplements_Tip");
+            if (healWaitDefaultPlayer == null || healWaitDefaultPlayer.IsInvalid())
+                healWaitDefaultPlayer = new BoolSmartSetting(
+                    "RV2_EADD_Settings_HealWaitDefaultPlayer", true, true,
+                    "RV2_EADD_Settings_HealWaitDefaultPlayer_Tip");
+            if (healWaitDefaultOther == null || healWaitDefaultOther.IsInvalid())
+                healWaitDefaultOther = new BoolSmartSetting(
+                    "RV2_EADD_Settings_HealWaitDefaultOther", true, true,
+                    "RV2_EADD_Settings_HealWaitDefaultOther_Tip");
+
         }
         
         private bool heightStale = true;
@@ -179,6 +205,14 @@ namespace RV2_Esegn_Additions
                     ChanceInRolls(24, BasePredatorAwarenessChance)), -1,
                 "RV2_EADD_Settings_PredatorAwarenessChanceExample_Tip".Translate());
             abortDigestionThreshold.DoSetting(list);
+            
+            list.Gap();
+            list.HeaderLabel("RV2_EADD_Settings_ExtrasHeader".Translate());
+            list.Gap();
+            
+            enableEndoanalepticsSupplements.DoSetting(list);
+            healWaitDefaultPlayer.DoSetting(list);
+            healWaitDefaultOther.DoSetting(list);
 
             list.EndScrollView(ref height, ref heightStale);
         }
