@@ -5,6 +5,7 @@ using System.Linq;
 using RimVore2;
 using Verse;
 using RimWorld;
+using UnityEngine;
 
 namespace RV2_Esegn_Additions.Utilities;
 
@@ -146,5 +147,30 @@ public static class DebugUtils
         }
             
         if (!succeeded) RV2Log.Message("No rolls succeeded.");
+    }
+    
+    [DebugAction("RV2-Esegn", "Test add endoanaleptics", actionType = DebugActionType.ToolMapForPawns, 
+        allowedGameStates = AllowedGameStates.PlayingOnMap)]
+    public static void TestAddEndoanaleptics(Pawn pawn)
+    {
+        EndoanalepticsUtils.AddTend(pawn, Random.Range(0.3f, 0.7f));
+        pawn.Drawer.Notify_DebugAffected();
+    }
+
+    [DebugAction("RV2-Esegn", "Test pop endoanaleptics tend", actionType = DebugActionType.ToolMapForPawns, 
+        allowedGameStates = AllowedGameStates.PlayingOnMap)]
+    public static void PopRandomTendEndoanaleptics(Pawn pawn)
+    {
+        pawn.Drawer.Notify_DebugAffected();
+        
+        var hediff = EndoanalepticsUtils.GetEndoanaleptics(pawn);
+
+        if (hediff == null)
+        {
+            RV2Log.Message("Pawn had no endoanaleptics hediff");
+            return;
+        }
+        
+        RV2Log.Message("Popped tend quality: " + hediff.PopRandomTend().ToStringPercent());
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <HediffDef>
+        <defName>RV2_EADD_EndoanalepticSupplementsHediff</defName>
+        <isBad>false</isBad>
+        <hediffClass>RV2_Esegn_Additions.Hediff_EndoanalepticSupplements</hediffClass>
+        <label>endoanaleptic supplements</label>
+        <description>Medical supplements to assist healing enzymes in the body.</description>
+        <comps>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>60000</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+        </comps>
+    </HediffDef>
+</Defs>
