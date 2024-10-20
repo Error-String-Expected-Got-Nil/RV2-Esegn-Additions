@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using HarmonyLib;
 using RimVore2;
+using RV2_Esegn_Additions.Utilities;
 
 namespace RV2_Esegn_Additions;
 
@@ -20,6 +21,12 @@ public class Patch_DesignationGizmo
 
         if (designation.def != RV2_EADD_Common.EaddDesignationDefOf.heal_wait) return;
 
-        __result = RV2_EADD_Settings.eadd.EnableEndoanalepticsSupplements;
+        if (!RV2_EADD_Settings.eadd.EnableEndoanalepticsSupplements)
+        {
+            __result = false;
+            return;
+        }
+
+        __result = EndoanalepticsUtils.CanDoHealVore(designation.pawn);
     }
 }

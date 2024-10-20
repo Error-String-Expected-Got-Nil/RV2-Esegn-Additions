@@ -22,19 +22,19 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == '1.4' ">
-      <DebugType>none</DebugType>
+      <DebugType>pdbonly</DebugType>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == '1.5' ">
-      <DebugType>none</DebugType>
+      <DebugType>pdbonly</DebugType>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == '1.4' ">
-      <DebugType>pdbonly</DebugType>
+      <Optimize>true</Optimize>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == '1.5' ">
-      <DebugType>pdbonly</DebugType>
+      <Optimize>true</Optimize>
     </PropertyGroup>
 
     <ItemGroup>

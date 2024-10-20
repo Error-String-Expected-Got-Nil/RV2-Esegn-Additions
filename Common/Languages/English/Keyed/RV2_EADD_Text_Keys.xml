@@ -15,4 +15,14 @@
     <RV2_EADD_Text_AccidentalDigestionAbortFail_Key>Accidental digestion abort fail</RV2_EADD_Text_AccidentalDigestionAbortFail_Key>
     <RV2_EADD_Text_AccidentalDigestionAbortFail>{PREDATOR} realized they were accidentally digesting their prey, but could not switch back to endo because digestion has already progressed too far.</RV2_EADD_Text_AccidentalDigestionAbortFail>
 
+    <RV2_EADD_Text_RMB_AdministerEAS_Self>Administer endoanaleptics to self</RV2_EADD_Text_RMB_AdministerEAS_Self>
+    <RV2_EADD_Text_RMB_AdministerEAS>Administer endoanaleptics to {PATIENT}</RV2_EADD_Text_RMB_AdministerEAS>
+    <RV2_EADD_Text_RMB_AdministerEAS_CannotReach>cannot reach</RV2_EADD_Text_RMB_AdministerEAS_CannotReach>
+
+    <RV2_EADD_Text_RMB_AdministerEAS_x1>Administer medicine x1</RV2_EADD_Text_RMB_AdministerEAS_x1>
+    <RV2_EADD_Text_RMB_AdministerEAS_x5>Administer medicine x5</RV2_EADD_Text_RMB_AdministerEAS_x5>
+    <RV2_EADD_Text_RMB_AdministerEAS_x10>Administer medicine x10</RV2_EADD_Text_RMB_AdministerEAS_x10>
+    <RV2_EADD_Text_RMB_AdministerEAS_ForPrey>Administer for current prey</RV2_EADD_Text_RMB_AdministerEAS_ForPrey>
+    <RV2_EADD_Text_RMB_AdministerEAS_ForTarget>Administer for potential prey</RV2_EADD_Text_RMB_AdministerEAS_ForTarget>
+
 </LanguageData>
