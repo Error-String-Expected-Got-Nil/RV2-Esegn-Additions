@@ -53,31 +53,59 @@ public class Patch_UI_RMB
                               + " (" + "RV2_EADD_Text_RMB_AdministerEAS_CannotReach".Translate() + ")";
                 disabled = true;
             }
-
+            
             if (disabled)
             {
                 __result.Add(UIUtility.DisabledOption(optionLabel));
                 continue;
             }
-            
+
+            var meds = EndoanalepticsUtils.FindBestMedicine(pawn, target.Pawn);
+            if (meds == null)
+            {
+                optionLabel += " (" + "RV2_EADD_Text_RMB_AdministerEAS_NoMeds".Translate() + ")";
+                __result.Add(UIUtility.DisabledOption(optionLabel));
+                continue;
+            }
+
             __result.Add(new FloatMenuOption(optionLabel, () => 
-                Find.WindowStack.Add(new FloatMenu(GetJobInitOptions(target.Pawn)))));
+                Find.WindowStack.Add(new FloatMenu(GetJobInitOptions(pawn, target.Pawn, meds)))));
         }
     }
 
-    private static List<FloatMenuOption> GetJobInitOptions(Pawn target)
+    private static List<FloatMenuOption> GetJobInitOptions(Pawn doctor, Pawn target, Thing startingMeds)
     {
-        return
+        List<FloatMenuOption> options = 
         [
-            new FloatMenuOption("RV2_EADD_Text_RMB_AdministerEAS_x1".Translate(), () => { }),
+            new("RV2_EADD_Text_RMB_AdministerEAS_x1".Translate(), () =>
+            {
+                var job = JobMaker.MakeJob(RV2_EADD_Common.EaddJobDefOf.AdministerEndoanaleptics, target, 
+                    startingMeds);
+                job.takeExtraIngestibles = 1;
+                doctor.jobs.TryTakeOrderedJob(job);
+            }),
 
-            new FloatMenuOption("RV2_EADD_Text_RMB_AdministerEAS_x5".Translate(), () => { }),
+            new("RV2_EADD_Text_RMB_AdministerEAS_x5".Translate(), () =>
+            {
+                var job = JobMaker.MakeJob(RV2_EADD_Common.EaddJobDefOf.AdministerEndoanaleptics, target, 
+                    startingMeds);
+                job.takeExtraIngestibles = 5;
+                doctor.jobs.TryTakeOrderedJob(job);
+            }),
 
-            new FloatMenuOption("RV2_EADD_Text_RMB_AdministerEAS_x10".Translate(), () => { }),
+            new("RV2_EADD_Text_RMB_AdministerEAS_x10".Translate(), () =>
+            {
+                var job = JobMaker.MakeJob(RV2_EADD_Common.EaddJobDefOf.AdministerEndoanaleptics, target, 
+                    startingMeds);
+                job.takeExtraIngestibles = 10;
+                doctor.jobs.TryTakeOrderedJob(job);
+            }),
 
-            new FloatMenuOption("RV2_EADD_Text_RMB_AdministerEAS_ForPrey".Translate(), () => { }),
+            new("RV2_EADD_Text_RMB_AdministerEAS_ForPrey".Translate(), () => { }),
 
-            new FloatMenuOption("RV2_EADD_Text_RMB_AdministerEAS_ForTarget".Translate(), () => { })
+            new("RV2_EADD_Text_RMB_AdministerEAS_ForTarget".Translate(), () => { })
         ];
+
+        return options;
     }
 }

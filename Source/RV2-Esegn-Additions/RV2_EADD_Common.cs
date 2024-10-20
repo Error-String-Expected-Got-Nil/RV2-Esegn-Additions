@@ -51,4 +51,15 @@ public class RV2_EADD_Common
 
         public static RV2DesignationDef heal_wait;
     }
+
+    [DefOf]
+    public static class EaddJobDefOf
+    {
+        static EaddJobDefOf()
+        {
+            DefOfHelper.EnsureInitializedInCtor(typeof(EaddJobDefOf));
+        }
+
+        public static JobDef AdministerEndoanaleptics;
+    }
 }
