@@ -31,13 +31,7 @@ public class Patch_RollAction_Heal
     {
         if (!RV2_EADD_Settings.eadd.EnableEndoanalepticsSupplements) return true;
         
-        var pawn = ActiveRecord.Predator;
-        var hediffeas = EndoanalepticsUtils.GetEndoanaleptics(pawn);
-
-        // Little confusing, but how the tooltips are set, heal_wait being true means endoanaleptics should be ignored
-        if (pawn.PawnData()?.Designations.TryGetValue(RV2_EADD_Common.EaddDesignationDefOf.heal_wait)?
-                .IsEnabled() == false && hediffeas == null)
-            return false;
+        var hediffeas = EndoanalepticsUtils.GetEndoanaleptics(ActiveRecord.Predator);
 
         // TendPawn is simple enough I'm just going to completely replace it if we need to tend with endoanaleptics
         // Easier than a transpiler

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/RimVore2.RollPresetDef[defName="Heal_Prey"]/actionsOnSuccess</xpath>
+        <order>Prepend</order>
+        <value>
+            <li Class="RV2_Esegn_Additions.RollAction_SkipIfCannotHeal">
+                <target>Prey</target>
+                <canBlockNextActions>true</canBlockNextActions>
+            </li>
+        </value>
+    </Operation>
+</Patch>
