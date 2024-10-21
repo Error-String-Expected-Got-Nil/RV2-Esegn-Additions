@@ -43,7 +43,9 @@ public class Patch_RollAction_Heal
         // Easier than a transpiler
         if (hediffeas != null)
         {
-            var (baseQuality, maxQuality) = hediffeas.PopRandomTend();
+            var quality = hediffeas.PopRandomTend();
+            var baseQuality = quality.First;
+            var maxQuality = quality.Second;
             injuries.RandomElement().Tended(baseQuality, maxQuality);
             
             return false;

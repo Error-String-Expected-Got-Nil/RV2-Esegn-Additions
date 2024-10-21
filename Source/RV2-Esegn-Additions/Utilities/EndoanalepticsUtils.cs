@@ -20,7 +20,7 @@ public static class EndoanalepticsUtils
     {
         var hediff = (Hediff_EndoanalepticSupplements)HediffMaker.MakeHediff(
             RV2_EADD_Common.EaddHediffDefOf.RV2_EADD_EndoanalepticSupplementsHediff, pawn);
-        hediff.TendQualities.Add((baseQuality, maxQuality));
+        hediff.TendQualities.Add(new ExposablePair(baseQuality, maxQuality));
         pawn.health.AddHediff(hediff);
     }
 

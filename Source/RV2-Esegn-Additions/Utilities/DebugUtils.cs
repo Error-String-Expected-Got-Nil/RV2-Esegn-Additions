@@ -183,7 +183,9 @@ public static class DebugUtils
             return;
         }
 
-        var (baseQuality, maxQuality) = hediff.PopRandomTend();
+        var quality = hediff.PopRandomTend();
+        var baseQuality = quality.First;
+        var maxQuality = quality.Second;
         RV2Log.Message("Popped tend quality: (" + baseQuality.ToStringPercent() + ", " 
                        + maxQuality.ToStringPercent() + ")");
     }

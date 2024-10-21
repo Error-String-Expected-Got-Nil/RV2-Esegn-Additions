@@ -28,6 +28,7 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
     private BoolSmartSetting healWaitDefaultPlayer;
     private BoolSmartSetting healWaitDefaultOther;
     private BoolSmartSetting endoanalepticsSkipWarmup;
+    private BoolSmartSetting healVoreWaitsForImmunity;
 
     public bool EnableVorePathConflicts => enableVorePathConflicts.value;
     public bool AllowConflictingManualInteractions => allowConflictingManualInteractions.value;
@@ -50,6 +51,7 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
     public bool HealWaitDefaultPlayer => healWaitDefaultPlayer.value;
     public bool HealWaitDefaultOther => healWaitDefaultOther.value;
     public bool EndoanalepticsSkipWarmup => endoanalepticsSkipWarmup.value;
+    public bool HealVoreWaitsForImmunity => healVoreWaitsForImmunity.value;
 
     public override void Reset()
     {
@@ -74,6 +76,7 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
         healWaitDefaultPlayer = null;
         healWaitDefaultOther = null;
         endoanalepticsSkipWarmup = null;
+        healVoreWaitsForImmunity = null;
             
         EnsureSmartSettingDefinition();
     }
@@ -163,7 +166,10 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
             endoanalepticsSkipWarmup = new BoolSmartSetting(
                 "RV2_EADD_Settings_EndoanalepticsSkipWarmup", true, true,
                 "RV2_EADD_Settings_EndoanalepticsSkipWarmup_Tip");
-
+        if (healVoreWaitsForImmunity == null || healVoreWaitsForImmunity.IsInvalid())
+            healVoreWaitsForImmunity = new BoolSmartSetting(
+                "RV2_EADD_Settings_HealVoreWaitsForImmunity", true, true,
+                "RV2_EADD_Settings_HealVoreWaitsForImmunity_Tip");
     }
         
     private bool heightStale = true;
@@ -221,6 +227,7 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
         healWaitDefaultPlayer.DoSetting(list);
         healWaitDefaultOther.DoSetting(list);
         endoanalepticsSkipWarmup.DoSetting(list);
+        healVoreWaitsForImmunity.DoSetting(list);
 
         list.Gap();
 
@@ -262,6 +269,7 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
         Scribe_Deep.Look(ref healWaitDefaultPlayer, nameof(healWaitDefaultPlayer));
         Scribe_Deep.Look(ref healWaitDefaultOther, nameof(healWaitDefaultOther));
         Scribe_Deep.Look(ref endoanalepticsSkipWarmup, nameof(endoanalepticsSkipWarmup));
+        Scribe_Deep.Look(ref healVoreWaitsForImmunity, nameof(healVoreWaitsForImmunity));
             
         PostExposeData();
     }
