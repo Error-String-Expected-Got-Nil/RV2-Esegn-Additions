@@ -2,7 +2,6 @@
 <ModMetaData>
   <name>RimVore2 - Esegn's Additions</name>
   <author>Esegn</author>
-  <url>https://gitlab.com/Nabber/rimvore-2</url>
   <packageId>Esegn.RV2EADD</packageId>
   <supportedVersions>
     <li>1.4</li>
