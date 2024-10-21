@@ -51,5 +51,7 @@
     <RV2_EADD_Settings_HealWaitDefaultPlayer_Tip>Whether player-controlled pawns should, by default, wait for endoanaleptics supplements before tending the wounds of their prey. Can be manually overridden.</RV2_EADD_Settings_HealWaitDefaultPlayer_Tip>
     <RV2_EADD_Settings_HealWaitDefaultOther>Healing vore wait default (other)</RV2_EADD_Settings_HealWaitDefaultOther>
     <RV2_EADD_Settings_HealWaitDefaultOther_Tip>Whether non-player-controlled pawns should, by default, wait for endoanaleptics supplements before tending the wounds of their prey. Can only be manually overridden if the "show all designations" setting from the base mod is enabled.</RV2_EADD_Settings_HealWaitDefaultOther_Tip>
+    <RV2_EADD_Settings_EndoanalepticsSkipWarmup>Endoanaleptics skip warmup</RV2_EADD_Settings_EndoanalepticsSkipWarmup>
+    <RV2_EADD_Settings_EndoanalepticsSkipWarmup_Tip>When enabled, the warmup phase of heal vore will be skipped if the predator has any endoanaleptics supplements, so that the prey can be tended right away.</RV2_EADD_Settings_EndoanalepticsSkipWarmup_Tip>
 
 </LanguageData>

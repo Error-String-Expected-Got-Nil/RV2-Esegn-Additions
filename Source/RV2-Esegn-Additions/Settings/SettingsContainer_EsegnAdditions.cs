@@ -27,6 +27,7 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
     private BoolSmartSetting enableEndoanalepticsSupplements;
     private BoolSmartSetting healWaitDefaultPlayer;
     private BoolSmartSetting healWaitDefaultOther;
+    private BoolSmartSetting endoanalepticsSkipWarmup;
 
     public bool EnableVorePathConflicts => enableVorePathConflicts.value;
     public bool AllowConflictingManualInteractions => allowConflictingManualInteractions.value;
@@ -48,6 +49,7 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
     public bool EnableEndoanalepticsSupplements => enableEndoanalepticsSupplements.value;
     public bool HealWaitDefaultPlayer => healWaitDefaultPlayer.value;
     public bool HealWaitDefaultOther => healWaitDefaultOther.value;
+    public bool EndoanalepticsSkipWarmup => endoanalepticsSkipWarmup.value;
 
     public override void Reset()
     {
@@ -71,6 +73,7 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
         enableEndoanalepticsSupplements = null;
         healWaitDefaultPlayer = null;
         healWaitDefaultOther = null;
+        endoanalepticsSkipWarmup = null;
             
         EnsureSmartSettingDefinition();
     }
@@ -156,6 +159,10 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
             healWaitDefaultOther = new BoolSmartSetting(
                 "RV2_EADD_Settings_HealWaitDefaultOther", true, true,
                 "RV2_EADD_Settings_HealWaitDefaultOther_Tip");
+        if (endoanalepticsSkipWarmup == null || endoanalepticsSkipWarmup.IsInvalid())
+            endoanalepticsSkipWarmup = new BoolSmartSetting(
+                "RV2_EADD_Settings_EndoanalepticsSkipWarmup", true, true,
+                "RV2_EADD_Settings_EndoanalepticsSkipWarmup_Tip");
 
     }
         
@@ -213,6 +220,9 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
         enableEndoanalepticsSupplements.DoSetting(list);
         healWaitDefaultPlayer.DoSetting(list);
         healWaitDefaultOther.DoSetting(list);
+        endoanalepticsSkipWarmup.DoSetting(list);
+
+        list.Gap();
 
         list.EndScrollView(ref height, ref heightStale);
     }
@@ -247,6 +257,11 @@ public class SettingsContainer_EsegnAdditions : SettingsContainer
         Scribe_Deep.Look(ref accidentalDigestionCooldown, nameof(accidentalDigestionCooldown));
         Scribe_Deep.Look(ref allowAwarenessRolls, nameof(allowAwarenessRolls));
         Scribe_Deep.Look(ref abortDigestionThreshold, nameof(abortDigestionThreshold));
+        
+        Scribe_Deep.Look(ref enableEndoanalepticsSupplements, nameof(enableEndoanalepticsSupplements));
+        Scribe_Deep.Look(ref healWaitDefaultPlayer, nameof(healWaitDefaultPlayer));
+        Scribe_Deep.Look(ref healWaitDefaultOther, nameof(healWaitDefaultOther));
+        Scribe_Deep.Look(ref endoanalepticsSkipWarmup, nameof(endoanalepticsSkipWarmup));
             
         PostExposeData();
     }

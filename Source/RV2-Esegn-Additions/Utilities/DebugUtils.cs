@@ -153,7 +153,7 @@ public static class DebugUtils
         allowedGameStates = AllowedGameStates.PlayingOnMap)]
     public static void TestAddEndoanaleptics(Pawn pawn)
     {
-        EndoanalepticsUtils.AddTend(pawn, Random.Range(0.3f, 0.7f));
+        EndoanalepticsUtils.AddTend(pawn, Random.Range(0.3f, 0.7f), 1.0f);
         pawn.Drawer.Notify_DebugAffected();
     }
 
@@ -170,7 +170,9 @@ public static class DebugUtils
             RV2Log.Message("Pawn had no endoanaleptics hediff");
             return;
         }
-        
-        RV2Log.Message("Popped tend quality: " + hediff.PopRandomTend().ToStringPercent());
+
+        var (baseQuality, maxQuality) = hediff.PopRandomTend();
+        RV2Log.Message("Popped tend quality: (" + baseQuality.ToStringPercent() + ", " 
+                       + maxQuality.ToStringPercent() + ")");
     }
 }

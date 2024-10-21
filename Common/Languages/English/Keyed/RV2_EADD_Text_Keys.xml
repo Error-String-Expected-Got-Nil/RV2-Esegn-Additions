@@ -17,12 +17,20 @@
 
     <RV2_EADD_Text_RMB_AdministerEAS_Self>Administer endoanaleptics to self</RV2_EADD_Text_RMB_AdministerEAS_Self>
     <RV2_EADD_Text_RMB_AdministerEAS>Administer endoanaleptics to {PATIENT}</RV2_EADD_Text_RMB_AdministerEAS>
-    <RV2_EADD_Text_RMB_AdministerEAS_CannotReach>cannot reach</RV2_EADD_Text_RMB_AdministerEAS_CannotReach>
+    <RV2_EADD_Text_RMB_AdministerEAS_CannotReach>Cannot reach</RV2_EADD_Text_RMB_AdministerEAS_CannotReach>
+    <RV2_EADD_Text_RMB_AdministerEAS_NoMeds>No available medicine</RV2_EADD_Text_RMB_AdministerEAS_NoMeds>
+    <RV2_EADD_Text_RMB_AdministerEAS_NoHealPrey>No heal prey</RV2_EADD_Text_RMB_AdministerEAS_NoHealPrey>
+    <RV2_EADD_Text_RMB_AdministerEAS_PreyAlreadyTendable>Already enough charges to tend prey</RV2_EADD_Text_RMB_AdministerEAS_PreyAlreadyTendable>
+    <RV2_EADD_Text_RMB_AdministerEAS_SelfTendDisabled>Self tend disabled</RV2_EADD_Text_RMB_AdministerEAS_SelfTendDisabled>
 
     <RV2_EADD_Text_RMB_AdministerEAS_x1>Administer medicine x1</RV2_EADD_Text_RMB_AdministerEAS_x1>
     <RV2_EADD_Text_RMB_AdministerEAS_x5>Administer medicine x5</RV2_EADD_Text_RMB_AdministerEAS_x5>
     <RV2_EADD_Text_RMB_AdministerEAS_x10>Administer medicine x10</RV2_EADD_Text_RMB_AdministerEAS_x10>
     <RV2_EADD_Text_RMB_AdministerEAS_ForPrey>Administer for current prey</RV2_EADD_Text_RMB_AdministerEAS_ForPrey>
     <RV2_EADD_Text_RMB_AdministerEAS_ForTarget>Administer for potential prey</RV2_EADD_Text_RMB_AdministerEAS_ForTarget>
+
+    <RV2_EADD_Text_RMB_AdministerEAS_ReferencePreyCannotBeHealVored>{PREDATOR} cannot use heal vore on {PREY}</RV2_EADD_Text_RMB_AdministerEAS_ReferencePreyCannotBeHealVored>
+    <RV2_EADD_Text_RMB_AdministerEAS_ReferencePreyHasNoTendableHediffs>{PREY} does have any injuries or illnesses that need tending</RV2_EADD_Text_RMB_AdministerEAS_ReferencePreyHasNoTendableHediffs>
+    <RV2_EADD_Text_RMB_AdministerEAS_ReferencePreyAlreadyTendable>{PREDATOR} already has enough endoanaleptics supplements to heal {PREY}</RV2_EADD_Text_RMB_AdministerEAS_ReferencePreyAlreadyTendable>
 
 </LanguageData>

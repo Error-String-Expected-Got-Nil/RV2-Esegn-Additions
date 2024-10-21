@@ -10,7 +10,7 @@ namespace RV2_Esegn_Additions;
 
 public class JobDriver_AdministerEndoanaleptics : JobDriver
 {
-    public const int BaseAdminsterDuration = 300;
+    public const int BaseAdminsterDuration = 200;
     public const int MedicineGrabTime = 25;
     public const float BaseExperienceGain = 150.0f;
 
@@ -189,6 +189,7 @@ public class JobDriver_AdministerEndoanaleptics : JobDriver
             var count = Mathf.Min(pawn.Map.reservationManager.CanReserveStack(pawn, Medicine, 10), 
                 required);
             if (count > 0) pawn.carryTracker.TryStartCarry(Medicine, count);
+            job.count = required - count;
             
             if (Medicine.Spawned) pawn.Map.reservationManager.Release(Medicine, pawn, job);
             job.SetTarget(MedicineIndex, pawn.carryTracker.CarriedThing);
@@ -206,8 +207,7 @@ public class JobDriver_AdministerEndoanaleptics : JobDriver
 
             var baseQuality = TendUtility.CalculateBaseTendQuality(pawn, Patient, Medicine.def);
             var maxQuality = Medicine.def.GetStatValueAbstract(StatDefOf.MedicalQualityMax);
-            var quality = Random.Range(baseQuality, maxQuality);
-            EndoanalepticsUtils.AddTend(Patient, quality);
+            EndoanalepticsUtils.AddTend(Patient, baseQuality, maxQuality);
             
             Patient.records.Increment(RecordDefOf.TimesTendedTo);
             pawn.records.Increment(RecordDefOf.TimesTendedOther);

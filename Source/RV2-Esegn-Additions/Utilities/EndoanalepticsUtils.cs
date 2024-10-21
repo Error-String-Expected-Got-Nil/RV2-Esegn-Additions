@@ -16,11 +16,11 @@ public static class EndoanalepticsUtils
         allMustMatch = true
     };
     
-    public static void AddTend(Pawn pawn, float tendQuality)
+    public static void AddTend(Pawn pawn, float baseQuality, float maxQuality)
     {
         var hediff = (Hediff_EndoanalepticSupplements)HediffMaker.MakeHediff(
             RV2_EADD_Common.EaddHediffDefOf.RV2_EADD_EndoanalepticSupplementsHediff, pawn);
-        hediff.TendQualities.Add(tendQuality);
+        hediff.TendQualities.Add((baseQuality, maxQuality));
         pawn.health.AddHediff(hediff);
     }
 
@@ -46,21 +46,25 @@ public static class EndoanalepticsUtils
     }
 
     // Get the number of medicine units needed to provide enough endoanaleptics supplements charges to the predator so
-    // that all untended hediffs on target can be tended. If predator and target are the same pawn, will instead
+    // that all untended hediffs on target will be tended. If predator and target are the same pawn, will instead
     // return based on the number of untended hediffs for all the predator's heal vore prey. 
     public static int GetMedicineNeededForTending(Pawn predator, Pawn target)
     {
         var hediffeas = GetEndoanaleptics(predator);
         var currentCharges = hediffeas == null ? 0 : hediffeas.TendQualities.Count;
+        var untendedPreyHediffs = GetUntendedHediffsOnPreyCount(predator);
         
         if (predator == target)
-            return Mathf.Max(0, predator.PawnData().VoreTracker.VoreTrackerRecords
-                                    .Where(record => record.VoreGoal == VoreGoalDefOf.Heal)
-                                    .Sum(record => record.Prey.health.hediffSet.GetHediffsTendable().Count())
-                                - currentCharges);
+            return Mathf.Max(0, untendedPreyHediffs - currentCharges);
 
-        return Mathf.Max(0, target.health.hediffSet.GetHediffsTendable().Count() - currentCharges);
+        return Mathf.Max(0, target.health.hediffSet.GetHediffsTendable().Count() + untendedPreyHediffs 
+                            - currentCharges);
     }
+
+    public static int GetUntendedHediffsOnPreyCount(Pawn predator)
+        => predator.PawnData().VoreTracker.VoreTrackerRecords
+            .Where(record => record.VoreGoal == VoreGoalDefOf.Heal)
+            .Sum(record => record.Prey.health.hediffSet.GetHediffsTendable().Count());
 
     // Variant of HealthAIUtility that doesn't care about the number of wounds on the patient.
     public static Thing FindBestMedicine(Pawn doctor, Pawn patient)

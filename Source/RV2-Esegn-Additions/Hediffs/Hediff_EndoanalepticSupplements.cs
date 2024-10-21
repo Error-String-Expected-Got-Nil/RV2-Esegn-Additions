@@ -11,16 +11,17 @@ namespace RV2_Esegn_Additions;
 
 public class Hediff_EndoanalepticSupplements : HediffWithComps
 {
-    public List<float> TendQualities = [];
+    public List<(float, float)> TendQualities = [];
 
     public override bool ShouldRemove => TendQualities.Empty();
     public override string Description => base.Description
                                           + "\n\nRemaining tends: " + TendQualities.Count
                                           + "\nAverage quality: " 
-                                          + (TendQualities.Sum(quality => quality) / TendQualities.Count)
+                                          + (TendQualities.Sum(quality => quality.Item1) / TendQualities.Count)
                                           .ToStringPercent();
 
-    public float PopRandomTend()
+    // Returns a tuple of (base quality, max quality)
+    public (float, float) PopRandomTend()
     {
         var index = Random.Range(0, TendQualities.Count);
         var tendQuality = TendQualities[index];

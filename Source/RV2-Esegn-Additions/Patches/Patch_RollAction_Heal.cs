@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Collections.Generic;
+using HarmonyLib;
 using RimVore2;
 using RV2_Esegn_Additions.Utilities;
 using Verse;
@@ -26,8 +27,10 @@ public class Patch_RollAction_Heal
     
     [HarmonyPatch("TendPawn")]
     [HarmonyPrefix]
-    public static bool Patch_TendPawn(ref float rollStrength)
+    public static bool Patch_TendPawn(IEnumerable<Hediff> injuries)
     {
+        if (!RV2_EADD_Settings.eadd.EnableEndoanalepticsSupplements) return true;
+        
         var pawn = ActiveRecord.Predator;
         var hediffeas = EndoanalepticsUtils.GetEndoanaleptics(pawn);
 
@@ -36,7 +39,15 @@ public class Patch_RollAction_Heal
                 .IsEnabled() == false && hediffeas == null)
             return false;
 
-        if (hediffeas != null) rollStrength = hediffeas.PopRandomTend();
+        // TendPawn is simple enough I'm just going to completely replace it if we need to tend with endoanaleptics
+        // Easier than a transpiler
+        if (hediffeas != null)
+        {
+            var (baseQuality, maxQuality) = hediffeas.PopRandomTend();
+            injuries.RandomElement().Tended(baseQuality, maxQuality);
+            
+            return false;
+        }
         
         return true;
     }
