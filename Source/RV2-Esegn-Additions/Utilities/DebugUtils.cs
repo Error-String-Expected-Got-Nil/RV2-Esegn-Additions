@@ -11,6 +11,18 @@ namespace RV2_Esegn_Additions.Utilities;
 
 public static class DebugUtils
 {
+    [DebugAction("RV2-Esegn", "Add heal_wait designations", actionType = DebugActionType.Action, 
+        allowedGameStates = AllowedGameStates.Playing)]
+    public static void EnsureHealWaitDesignationInitialized()
+    {
+        var designation = RV2_EADD_Common.EaddDesignationDefOf.heal_wait;
+        
+        RV2Mod.RV2Component.AllPawnData
+            .Where(pawnData => pawnData.Designations.TryGetValue(designation) == null)
+            .ForEach(pawnData => pawnData.Designations.SetOrAdd(designation, new RV2Designation(pawnData.Pawn, 
+                designation)));
+    }
+    
     [DebugAction("RV2-Esegn", "Print predator records", actionType = DebugActionType.ToolMapForPawns, 
         allowedGameStates = AllowedGameStates.PlayingOnMap)]
     public static void PrintPredatorRecords(Pawn predator)
