@@ -14,7 +14,7 @@ public class Hediff_EndoanalepticSupplements : HediffWithComps
 {
     public List<ExposablePair> TendQualities = [];
 
-    public override bool ShouldRemove => TendQualities.Empty();
+    public override bool ShouldRemove => base.ShouldRemove || TendQualities.Empty();
     public override string Description => base.Description
                                           + "\n\nRemaining tends: " + TendQualities.Count
                                           + "\nAverage quality: " 
