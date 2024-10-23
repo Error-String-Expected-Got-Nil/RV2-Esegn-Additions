@@ -11,14 +11,24 @@ public class RollAction_SkipIfCannotHeal : RollAction
     {
         base.TryAction(curRecord, rollStrength);
 
-        if (!TargetPawn.health.hediffSet.hediffs
-                .Any(hediff => hediff.TendableNow() || (hediff is Hediff_Injury && !hediff.IsPermanent())))
+        var anyTendable = false;
+        var anyHealable = false;
+        
+        TargetPawn.health.hediffSet.hediffs.ForEach(hediff =>
+        {
+            if (hediff.TendableNow()) anyTendable = true;
+            if (hediff is Hediff_Injury && !hediff.IsPermanent()) anyHealable = true;
+        });
+        
+        if (!anyTendable && !anyHealable)
             return false;
         
         if (!RV2_EADD_Settings.eadd.EnableEndoanalepticsSupplements) return true;
         var hediffeas = EndoanalepticsUtils.GetEndoanaleptics(curRecord.Predator);
-        if (curRecord.Predator.PawnData()?.Designations.TryGetValue(RV2_EADD_Common.EaddDesignationDefOf.heal_wait)?
-                .IsEnabled() == false && hediffeas == null)
+        if (hediffeas == null 
+            && anyTendable
+            && curRecord.Predator.PawnData()?.Designations.TryGetValue(RV2_EADD_Common.EaddDesignationDefOf.heal_wait)
+                ?.IsEnabled() == false)
             return false;
 
         return true;
